@@ -49,22 +49,53 @@ export default function AITranslatorPage() {
 
     setTimeout(() => {
       setIsTranslating(false);
-      if (sourceText.includes('किताब') || sourceText.includes('पृष्ठ')) {
-        setTranslatedText('ᱜᱤᱫᱽᱨᱟᱹ ᱠᱚ, ᱯᱩᱛᱷᱤ ᱡᱷᱤᱡ ᱯᱮ ᱟᱨ ᱥᱟᱠᱟᱢ ᱮᱞ ᱑᱐ ᱨᱮ ᱥᱮᱱᱚᱜ ᱯᱮ᱾');
-        setTransliteration('Gidra ko, puthi jhij pe ar sakam el 10 re senog pe.');
-      } else if (sourceText.includes('गिनती') || sourceText.includes('संख्या')) {
-        setTranslatedText('ᱜᱤᱫᱽᱨᱟᱹ ᱠᱚ, ᱛᱮᱦᱮᱧ ᱫᱚ ᱟᱵᱚ ᱞᱮᱠᱷᱟ ᱵᱚᱱ ᱪᱮᱫᱚᱜᱼᱟ᱾');
-        setTransliteration('Gidra ko, teheñ do abo lekha bon chedo\'a.');
+      let outText = '';
+      let outTranslit = '';
+
+      if (targetLang === 'odia') {
+        if (sourceText.includes('किताब') || sourceText.includes('पृष्ठ')) {
+          outText = 'ପିଲାମାନେ, ବହି ଖୋଲନ୍ତୁ ଏବଂ ପୃଷ୍ଠା ସଂଖ୍ୟା ୧୦ କୁ ଯାଆନ୍ତୁ।';
+          outTranslit = 'Pilamane, bahi kholantu ebang prushtha sankhya 10 ku jaantu.';
+        } else if (sourceText.includes('गिनती') || sourceText.includes('संख्या') || sourceText.includes('1 से 20')) {
+          outText = 'ପିଲାମାନେ, ଆଜି ଆମେ ୧ ରୁ ୨୦ ପର୍ଯ୍ୟନ୍ତ ଗଣିବା ଶିଖିବା।';
+          outTranslit = 'Pilamane, aji ame 1 ru 20 parjyanta ganiba sikhiba.';
+        } else if (sourceText.includes('आम') || sourceText.includes('बचे') || sourceText.includes('घटाव')) {
+          outText = 'ଯଦି ଆପଣଙ୍କ ପାଖରେ ୫ଟି ଆମ୍ବ ଅଛି ଏବଂ ୨ଟି ଦେଲେ, ତେବେ ୩ଟି ବଳିଲା।';
+          outTranslit = 'Jadi aapananka pakhare 5ti amba achhi ebam 2ti dele, tebe 3ti balila.';
+        } else {
+          outText = 'ପିଲାମାନେ, ଏହି କଥାକୁ ଧ୍ୟାନରେ ରଖନ୍ତୁ ଏବଂ ଭଲଭାବେ ଶିଖନ୍ତୁ।';
+          outTranslit = 'Pilamane, ehi kathaku dhyanare rakhantu ebang bhalabhabe sikhantu.';
+        }
+      } else if (targetLang === 'santhali') {
+        if (sourceText.includes('किताब') || sourceText.includes('पृष्ठ')) {
+          outText = 'ᱜᱤᱫᱽᱨᱟᱹ ᱠᱚ, ᱯᱩᱛᱷᱤ ᱡᱷᱤᱡ ᱯᱮ ᱟᱨ ᱥᱟᱠᱟᱢ ᱮᱞ ᱑᱐ ᱨᱮ ᱥᱮᱱᱚᱜ ᱯᱮ᱾';
+          outTranslit = 'Gidra ko, puthi jhij pe ar sakam el 10 re senog pe.';
+        } else if (sourceText.includes('गिनती') || sourceText.includes('संख्या')) {
+          outText = 'ᱜᱤᱫᱽᱨᱟᱹ ᱠᱚ, ᱛᱮᱦᱮᱧ ᱫᱚ ᱟᱵᱚ ᱞᱮᱠᱷᱟ ᱵᱚᱱ ᱪᱮᱫᱚᱜᱼᱟ᱾';
+          outTranslit = 'Gidra ko, teheñ do abo lekha bon chedo\'a.';
+        } else {
+          outText = 'ᱜᱤᱫᱽᱨᱟᱹ ᱠᱚ, ᱱᱚᱣᱟ ᱠᱟᱛᱷᱟ ᱫᱚᱦᱚᱭ ᱯᱮ ᱟᱨ ᱪᱮᱫᱚᱜ ᱯᱮ᱾';
+          outTranslit = 'Gidra ko, nowa katha dohoy pe ar chedog pe.';
+        }
       } else {
-        setTranslatedText('ᱜᱤᱫᱽᱨᱟᱹ ᱠᱚ, ᱱᱚᱣᱟ ᱠᱟᱛᱷᱟ ᱫᱚᱦᱚᱭ ᱯᱮ ᱟᱨ ᱪᱮᱫᱚᱜ ᱯᱮ᱾');
-        setTransliteration('Gidra ko, nowa katha dohoy pe ar chedog pe.');
+        const langObj = SUPPORTED_LANGUAGES.find(l => l.id === targetLang);
+        if (langObj) {
+          outText = langObj.samplePhraseTarget;
+          outTranslit = langObj.transliteration;
+        } else {
+          outText = sourceText;
+          outTranslit = sourceText;
+        }
       }
+
+      setTranslatedText(outText);
+      setTransliteration(outTranslit);
 
       setHistory(prev => [
         {
           id: Date.now(),
           source: sourceText,
-          target: translatedText,
+          target: outText,
           lang: targetLang.toUpperCase(),
           time: 'Just now'
         },
@@ -90,14 +121,16 @@ export default function AITranslatorPage() {
   };
 
   const handleSpeakTarget = () => {
-    speechSynthesizer.speak(transliteration, {
-      lang: 'hi-IN'
+    const targetObj = SUPPORTED_LANGUAGES.find(l => l.id === targetLang);
+    speechSynthesizer.speak(transliteration || translatedText, {
+      lang: targetObj?.voiceLangCode || 'hi-IN'
     });
   };
 
   const handleSpeakSource = () => {
+    const sourceObj = SUPPORTED_LANGUAGES.find(l => l.id === sourceLang);
     speechSynthesizer.speak(sourceText, {
-      lang: 'hi-IN'
+      lang: sourceObj?.voiceLangCode || 'hi-IN'
     });
   };
 
@@ -160,10 +193,11 @@ export default function AITranslatorPage() {
                 onChange={(e) => setSourceLang(e.target.value)}
                 className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-navy-50 dark:bg-navy-950 border border-navy-200 dark:border-darkborder text-navy-900 dark:text-white"
               >
-                <option value="hindi">Hindi (हिन्दी)</option>
-                <option value="santhali">Santhali (ᱥᱟᱱᱛᱟᱲᱤ)</option>
-                <option value="ho">Ho (ᱦᱳ)</option>
-                <option value="mundari">Mundari (ᱢᱩᱱᱰᱟᱨᱤ)</option>
+                {SUPPORTED_LANGUAGES.map(l => (
+                  <option key={l.id} value={l.id}>
+                    {l.name} ({l.nativeName.split(' ')[0]})
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -229,22 +263,23 @@ export default function AITranslatorPage() {
                 onChange={(e) => setTargetLang(e.target.value)}
                 className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-brand-50 dark:bg-brand-950 border border-brand-200 dark:border-brand-800 text-brand-900 dark:text-brand-300"
               >
-                <option value="santhali">Santhali ( Ol Chiki )</option>
-                <option value="ho">Ho ( Warang Chiti )</option>
-                <option value="mundari">Mundari ( Bani Hisir )</option>
-                <option value="hindi">Hindi ( Devanagari )</option>
+                {SUPPORTED_LANGUAGES.map(l => (
+                  <option key={l.id} value={l.id}>
+                    {l.name} ({l.nativeName.split(' ')[0]})
+                  </option>
+                ))}
               </select>
             </div>
 
             <span className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold">
-              ✓ Edge AI: 94% Match
+              ✓ Edge AI: 96% Match
             </span>
           </div>
 
           <div className="p-4 rounded-2xl bg-brand-50/60 dark:bg-brand-950/40 border border-brand-200 dark:border-brand-800/80 min-h-[160px] flex flex-col justify-between space-y-3">
             <div>
               <span className="text-[10px] font-bold uppercase tracking-wider text-brand-800 dark:text-brand-300 block mb-1">
-                Native Script (Ol Chiki):
+                Native Script ({SUPPORTED_LANGUAGES.find(l => l.id === targetLang)?.script || 'Native'}):
               </span>
               <p className="text-lg font-bold text-navy-950 dark:text-white leading-relaxed">
                 {translatedText}

@@ -27,70 +27,27 @@ export const TEACHER_PROFILE = {
 
 export const SUPPORTED_LANGUAGES = [
   {
-    id: "santhali",
-    name: "Santhali",
-    nativeName: "ᱥᱟᱱᱛᱟᱲᱤ (Santali)",
-    script: "Ol Chiki / Devanagari",
-    speakersCount: "7.6 Million",
-    region: "Jharkhand, Odisha, West Bengal",
-    vocabularyCount: "12,840",
-    audioCount: "3,240",
-    lessonsCount: 184,
-    status: "Available",
+    id: "odia",
+    name: "Odia",
+    nativeName: "ଓଡ଼ିଆ (Odia)",
+    script: "Odia script",
+    speakersCount: "45 Million",
+    region: "Odisha, Jharkhand, West Bengal, Andhra Pradesh",
+    vocabularyCount: "34,500",
+    audioCount: "8,200",
+    lessonsCount: 240,
+    status: "Core Language",
     capabilities: {
-      textTranslation: { level: "Excellent", status: "ready", label: "Excellent" },
-      speechRecognition: { level: "Available", status: "ready", label: "Available" },
-      textToSpeech: { level: "Available", status: "ready", label: "Available" },
-      offlineSupport: { level: "Available", status: "ready", label: "Available" },
-      confidenceScore: "94%"
+      textTranslation: { level: "Core", status: "ready", label: "Master (96%)" },
+      speechRecognition: { level: "Core", status: "ready", label: "Native ASR (95%)" },
+      textToSpeech: { level: "Core", status: "ready", label: "Natural TTS (96%)" },
+      offlineSupport: { level: "Core", status: "ready", label: "Installed" },
+      confidenceScore: "96%"
     },
     samplePhraseHindi: "बच्चों, आज हम 1 से 20 तक की गिनती सीखेंगे।",
-    samplePhraseTarget: "ᱜᱤᱫᱽᱨᱟᱹ ᱠᱚ, ᱛᱮᱦᱮᱧ ᱫᱚ ᱟᱵᱚ ᱑ ᱠᱷᱚᱱ ᱒᱐ ᱦᱟᱹᱵᱤᱡ ᱞᱮᱠᱷᱟ ᱵᱚᱱ ᱪᱮᱫᱚᱜᱼᱟ᱾",
-    transliteration: "Gidra ko, teheñ do abo 1 khon 20 habić lekha bon chedo'a."
-  },
-  {
-    id: "ho",
-    name: "Ho",
-    nativeName: "ᱦᱳ (Ho)",
-    script: "Warang Chiti / Devanagari",
-    speakersCount: "1.4 Million",
-    region: "West Singhbhum, Jharkhand & Mayurbhanj, Odisha",
-    vocabularyCount: "8,920",
-    audioCount: "1,980",
-    lessonsCount: 96,
-    status: "Beta Support",
-    capabilities: {
-      textTranslation: { level: "Available", status: "ready", label: "Available" },
-      speechRecognition: { level: "Beta", status: "beta", label: "Beta (88%)" },
-      textToSpeech: { level: "Beta", status: "beta", label: "Beta (85%)" },
-      offlineSupport: { level: "Available", status: "ready", label: "Available" },
-      confidenceScore: "87%"
-    },
-    samplePhraseHindi: "बच्चों, आज हम 1 से 20 तक की गिनती सीखेंगे।",
-    samplePhraseTarget: "ᱦᱚᱯᱚᱱ ᱠᱚ, ᱛᱤᱥᱤᱝ ᱟᱵᱩ ᱑ ᱠᱷᱚᱱ ᱒᱐ ᱡᱟᱠᱮᱫ ᱞᱮᱠᱷᱟ ᱵᱩ ᱤᱛᱩᱱᱟ᱾",
-    transliteration: "Hopon ko, tising abu 1 khon 20 jaked lekha bu ituna."
-  },
-  {
-    id: "mundari",
-    name: "Mundari",
-    nativeName: "ᱢᱩᱱᱰᱟᱨᱤ (Mundari)",
-    script: "Bani Hisir / Devanagari",
-    speakersCount: "1.1 Million",
-    region: "Ranchi, Khunti, Jharkhand",
-    vocabularyCount: "7,450",
-    audioCount: "1,420",
-    lessonsCount: 78,
-    status: "Beta Support",
-    capabilities: {
-      textTranslation: { level: "Available", status: "ready", label: "Available" },
-      speechRecognition: { level: "Beta", status: "beta", label: "Beta (84%)" },
-      textToSpeech: { level: "Beta", status: "beta", label: "Beta (82%)" },
-      offlineSupport: { level: "Available", status: "ready", label: "Available" },
-      confidenceScore: "84%"
-    },
-    samplePhraseHindi: "बच्चों, आज हम 1 से 20 तक की गिनती सीखेंगे।",
-    samplePhraseTarget: "ᱦᱚᱱ ᱠᱚ, ᱛᱤᱥᱤᱝ ᱟᱵᱩ ᱑ ᱮᱛᱮ ᱒᱐ ᱡᱟᱠᱮᱫ ᱞᱮᱠᱷᱟ ᱵᱩ ᱪᱮᱫᱚᱜᱼᱟ᱾",
-    transliteration: "Hon ko, tising abu 1 ete 20 jaked lekha bu chedo'a."
+    samplePhraseTarget: "ପିଲାମାନେ, ଆଜି ଆମେ ୧ ରୁ ୨୦ ପର୍ଯ୍ୟନ୍ତ ଗଣିବା ଶିଖିବା।",
+    transliteration: "Pilamane, aji ame 1 ru 20 parjyanta ganiba sikhiba.",
+    voiceLangCode: "or-IN"
   },
   {
     id: "hindi",
@@ -112,7 +69,560 @@ export const SUPPORTED_LANGUAGES = [
     },
     samplePhraseHindi: "बच्चों, आज हम 1 से 20 तक की गिनती सीखेंगे।",
     samplePhraseTarget: "बच्चों, आज हम 1 से 20 तक की गिनती सीखेंगे।",
-    transliteration: "Bachhon, aaj hum 1 se 20 tak ki ginti seekhenge."
+    transliteration: "Bachhon, aaj hum 1 se 20 tak ki ginti seekhenge.",
+    voiceLangCode: "hi-IN"
+  },
+  {
+    id: "santhali",
+    name: "Santhali",
+    nativeName: "ᱥᱟᱱᱛᱟᱲᱤ (Santali)",
+    script: "Ol Chiki / Devanagari",
+    speakersCount: "7.6 Million",
+    region: "Jharkhand, Odisha, West Bengal, Assam",
+    vocabularyCount: "12,840",
+    audioCount: "3,240",
+    lessonsCount: 184,
+    status: "Available",
+    capabilities: {
+      textTranslation: { level: "Excellent", status: "ready", label: "Excellent" },
+      speechRecognition: { level: "Available", status: "ready", label: "Available" },
+      textToSpeech: { level: "Available", status: "ready", label: "Available" },
+      offlineSupport: { level: "Available", status: "ready", label: "Available" },
+      confidenceScore: "94%"
+    },
+    samplePhraseHindi: "बच्चों, आज हम 1 से 20 तक की गिनती सीखेंगे।",
+    samplePhraseTarget: "ᱜᱤᱫᱽᱨᱟᱹ ᱠᱚ, ᱛᱮᱦᱮᱧ ᱫᱚ ᱟᱵᱚ ᱑ ᱠᱷᱚᱱ ᱒᱐ ᱦᱟᱹᱵᱤᱡ ᱞᱮᱠᱷᱟ ᱵᱚᱱ ᱪᱮᱫᱚᱜᱼᱟ᱾",
+    transliteration: "Gidra ko, teheñ do abo 1 khon 20 habić lekha bon chedo'a.",
+    voiceLangCode: "sat-IN"
+  },
+  {
+    id: "ho",
+    name: "Ho",
+    nativeName: "ᱦᱳ (Ho)",
+    script: "Warang Chiti / Devanagari",
+    speakersCount: "1.4 Million",
+    region: "West Singhbhum, Jharkhand & Mayurbhanj, Odisha",
+    vocabularyCount: "8,920",
+    audioCount: "1,980",
+    lessonsCount: 96,
+    status: "Beta Support",
+    capabilities: {
+      textTranslation: { level: "Available", status: "ready", label: "Available" },
+      speechRecognition: { level: "Beta", status: "beta", label: "Beta (88%)" },
+      textToSpeech: { level: "Beta", status: "beta", label: "Beta (85%)" },
+      offlineSupport: { level: "Available", status: "ready", label: "Available" },
+      confidenceScore: "87%"
+    },
+    samplePhraseHindi: "बच्चों, आज हम 1 से 20 तक की गिनती सीखेंगे।",
+    samplePhraseTarget: "ᱦᱚᱯᱚᱱ ᱠᱚ, ᱛᱤᱥᱤᱝ ᱟᱵᱩ ᱑ ᱠᱷᱚᱱ ᱒᱐ ᱡᱟᱠᱮᱫ ᱞᱮᱠᱷᱟ ᱵᱩ ᱤᱛᱩᱱᱟ᱾",
+    transliteration: "Hopon ko, tising abu 1 khon 20 jaked lekha bu ituna.",
+    voiceLangCode: "hoc-IN"
+  },
+  {
+    id: "mundari",
+    name: "Mundari",
+    nativeName: "ᱢᱩᱱᱰᱟᱨᱤ (Mundari)",
+    script: "Bani Hisir / Devanagari",
+    speakersCount: "1.1 Million",
+    region: "Ranchi, Khunti, Jharkhand & Sundargarh, Odisha",
+    vocabularyCount: "7,450",
+    audioCount: "1,420",
+    lessonsCount: 78,
+    status: "Beta Support",
+    capabilities: {
+      textTranslation: { level: "Available", status: "ready", label: "Available" },
+      speechRecognition: { level: "Beta", status: "beta", label: "Beta (84%)" },
+      textToSpeech: { level: "Beta", status: "beta", label: "Beta (82%)" },
+      offlineSupport: { level: "Available", status: "ready", label: "Available" },
+      confidenceScore: "84%"
+    },
+    samplePhraseHindi: "बच्चों, आज हम 1 से 20 तक की गिनती सीखेंगे।",
+    samplePhraseTarget: "ᱦᱚᱱ ᱠᱚ, ᱛᱤᱥᱤᱝ ᱟᱵᱩ ᱑ ᱮᱛᱮ ᱒᱐ ᱡᱟᱠᱮᱫ ᱞᱮᱠᱷᱟ ᱵᱩ ᱪᱮᱫᱚᱜᱼᱟ᱾",
+    transliteration: "Hon ko, tising abu 1 ete 20 jaked lekha bu chedo'a.",
+    voiceLangCode: "unr-IN"
+  },
+  {
+    id: "bengali",
+    name: "Bengali",
+    nativeName: "বাংলা (Bangla)",
+    script: "Bengali script",
+    speakersCount: "100+ Million",
+    region: "West Bengal, Tripura, Assam, Jharkhand",
+    vocabularyCount: "42,000",
+    audioCount: "12,500",
+    lessonsCount: 290,
+    status: "Core Language",
+    capabilities: {
+      textTranslation: { level: "Core", status: "ready", label: "Master (98%)" },
+      speechRecognition: { level: "Core", status: "ready", label: "Native ASR (96%)" },
+      textToSpeech: { level: "Core", status: "ready", label: "Natural TTS (97%)" },
+      offlineSupport: { level: "Core", status: "ready", label: "Installed" },
+      confidenceScore: "97%"
+    },
+    samplePhraseHindi: "बच्चों, आज हम 1 से 20 तक की गिनती सीखेंगे।",
+    samplePhraseTarget: "বাচ্চারা, আজ আমরা ১ থেকে ২০ পর্যন্ত গণনা শিখব।",
+    transliteration: "Bacchara, aaj amra 1 theke 20 porjonto gonona shikhbo.",
+    voiceLangCode: "bn-IN"
+  },
+  {
+    id: "telugu",
+    name: "Telugu",
+    nativeName: "తెలుగు (Telugu)",
+    script: "Telugu script",
+    speakersCount: "82 Million",
+    region: "Andhra Pradesh, Telangana, Odisha",
+    vocabularyCount: "38,000",
+    audioCount: "9,600",
+    lessonsCount: 260,
+    status: "Core Language",
+    capabilities: {
+      textTranslation: { level: "Core", status: "ready", label: "Master (97%)" },
+      speechRecognition: { level: "Core", status: "ready", label: "Native ASR (95%)" },
+      textToSpeech: { level: "Core", status: "ready", label: "Natural TTS (96%)" },
+      offlineSupport: { level: "Core", status: "ready", label: "Installed" },
+      confidenceScore: "96%"
+    },
+    samplePhraseHindi: "बच्चों, आज हम 1 से 20 तक की गिनती सीखेंगे।",
+    samplePhraseTarget: "పిల్లలూ, ఈరోజు మనం 1 నుండి 20 వరకు లెక్కించడం నేర్చుకుంటాం.",
+    transliteration: "Pillaloo, eeroju manam 1 nundi 20 varaku lekkinchadam nerchukuntam.",
+    voiceLangCode: "te-IN"
+  },
+  {
+    id: "marathi",
+    name: "Marathi",
+    nativeName: "मराठी (Marathi)",
+    script: "Devanagari",
+    speakersCount: "83 Million",
+    region: "Maharashtra, Goa",
+    vocabularyCount: "39,000",
+    audioCount: "10,200",
+    lessonsCount: 275,
+    status: "Core Language",
+    capabilities: {
+      textTranslation: { level: "Core", status: "ready", label: "Master (98%)" },
+      speechRecognition: { level: "Core", status: "ready", label: "Native ASR (96%)" },
+      textToSpeech: { level: "Core", status: "ready", label: "Natural TTS (97%)" },
+      offlineSupport: { level: "Core", status: "ready", label: "Installed" },
+      confidenceScore: "97%"
+    },
+    samplePhraseHindi: "बच्चों, आज हम 1 से 20 तक की गिनती सीखेंगे।",
+    samplePhraseTarget: "मुलांनो, आज आपण १ ते २० पर्यंतचे अंक मोजायला शिकूया.",
+    transliteration: "Mulanno, aaj aapan 1 te 20 paryantche ank mojala shikuya.",
+    voiceLangCode: "mr-IN"
+  },
+  {
+    id: "tamil",
+    name: "Tamil",
+    nativeName: "தமிழ் (Tamil)",
+    script: "Tamil script",
+    speakersCount: "75 Million",
+    region: "Tamil Nadu, Puducherry",
+    vocabularyCount: "41,000",
+    audioCount: "11,000",
+    lessonsCount: 280,
+    status: "Core Language",
+    capabilities: {
+      textTranslation: { level: "Core", status: "ready", label: "Master (98%)" },
+      speechRecognition: { level: "Core", status: "ready", label: "Native ASR (96%)" },
+      textToSpeech: { level: "Core", status: "ready", label: "Natural TTS (97%)" },
+      offlineSupport: { level: "Core", status: "ready", label: "Installed" },
+      confidenceScore: "97%"
+    },
+    samplePhraseHindi: "बच्चों, आज हम 1 से 20 तक की गिनती सीखेंगे।",
+    samplePhraseTarget: "குழந்தைகளே, இன்று நாம் 1 முதல் 20 வரை எண்ண கற்றுக்கொள்வோம்.",
+    transliteration: "Kuzhandhaigale, indru naam 1 mudhal 20 varai enna katrukkolvom.",
+    voiceLangCode: "ta-IN"
+  },
+  {
+    id: "gujarati",
+    name: "Gujarati",
+    nativeName: "ગુજરાતી (Gujarati)",
+    script: "Gujarati script",
+    speakersCount: "55 Million",
+    region: "Gujarat, Dadra & Nagar Haveli",
+    vocabularyCount: "35,000",
+    audioCount: "8,900",
+    lessonsCount: 230,
+    status: "Core Language",
+    capabilities: {
+      textTranslation: { level: "Core", status: "ready", label: "Master (97%)" },
+      speechRecognition: { level: "Core", status: "ready", label: "Native ASR (95%)" },
+      textToSpeech: { level: "Core", status: "ready", label: "Natural TTS (96%)" },
+      offlineSupport: { level: "Core", status: "ready", label: "Installed" },
+      confidenceScore: "96%"
+    },
+    samplePhraseHindi: "बच्चों, आज हम 1 से 20 तक की गिनती सीखेंगे।",
+    samplePhraseTarget: "બાળકો, આજે આપણે ૧ થી ૨૦ સુધીની ગણતરી શીખીશું.",
+    transliteration: "Balako, aaje aapan 1 thi 20 sudhini ganatari shikhishu.",
+    voiceLangCode: "gu-IN"
+  },
+  {
+    id: "urdu",
+    name: "Urdu",
+    nativeName: "اردو (Urdu)",
+    script: "Nastaliq / Perso-Arabic",
+    speakersCount: "50+ Million",
+    region: "Pan-India, Telangana, UP, Bihar, J&K",
+    vocabularyCount: "36,000",
+    audioCount: "9,100",
+    lessonsCount: 225,
+    status: "Core Language",
+    capabilities: {
+      textTranslation: { level: "Core", status: "ready", label: "Master (98%)" },
+      speechRecognition: { level: "Core", status: "ready", label: "Native ASR (96%)" },
+      textToSpeech: { level: "Core", status: "ready", label: "Natural TTS (97%)" },
+      offlineSupport: { level: "Core", status: "ready", label: "Installed" },
+      confidenceScore: "97%"
+    },
+    samplePhraseHindi: "बच्चों, आज हम 1 से 20 तक की गिनती सीखेंगे।",
+    samplePhraseTarget: "بچو، آج ہم 1 سے 20 تک گنتی سیکھیں گے۔",
+    transliteration: "Bachhon, aaj hum 1 se 20 tak ginti seekhenge.",
+    voiceLangCode: "ur-IN"
+  },
+  {
+    id: "kannada",
+    name: "Kannada",
+    nativeName: "ಕನ್ನಡ (Kannada)",
+    script: "Kannada script",
+    speakersCount: "44 Million",
+    region: "Karnataka",
+    vocabularyCount: "33,000",
+    audioCount: "7,800",
+    lessonsCount: 215,
+    status: "Core Language",
+    capabilities: {
+      textTranslation: { level: "Core", status: "ready", label: "Master (96%)" },
+      speechRecognition: { level: "Core", status: "ready", label: "Native ASR (94%)" },
+      textToSpeech: { level: "Core", status: "ready", label: "Natural TTS (95%)" },
+      offlineSupport: { level: "Core", status: "ready", label: "Installed" },
+      confidenceScore: "95%"
+    },
+    samplePhraseHindi: "बच्चों, आज हम 1 से 20 तक की गिनती सीखेंगे।",
+    samplePhraseTarget: "ಮಕ್ಕಳೇ, ಇಂದು ನಾವು 1 ರಿಂದ 20 ರವರೆಗೆ ಎಣಿಸುವುದನ್ನು ಕಲಿಯುತ್ತೇವೆ.",
+    transliteration: "Makkale, indu naavu 1 rinda 20 ravarage enisuvudannu kaliyutteve.",
+    voiceLangCode: "kn-IN"
+  },
+  {
+    id: "malayalam",
+    name: "Malayalam",
+    nativeName: "മലയാളം (Malayalam)",
+    script: "Malayalam script",
+    speakersCount: "38 Million",
+    region: "Kerala, Lakshadweep",
+    vocabularyCount: "32,000",
+    audioCount: "7,400",
+    lessonsCount: 210,
+    status: "Core Language",
+    capabilities: {
+      textTranslation: { level: "Core", status: "ready", label: "Master (96%)" },
+      speechRecognition: { level: "Core", status: "ready", label: "Native ASR (94%)" },
+      textToSpeech: { level: "Core", status: "ready", label: "Natural TTS (95%)" },
+      offlineSupport: { level: "Core", status: "ready", label: "Installed" },
+      confidenceScore: "95%"
+    },
+    samplePhraseHindi: "बच्चों, आज हम 1 से 20 तक की गिनती सीखेंगे।",
+    samplePhraseTarget: "കുട്ടികളെ, ഇന്ന് നമ്മൾ 1 മുതൽ 20 വരെയുള്ള എണ്ണൽ പഠിക്കും.",
+    transliteration: "Kuttikale, innu nammal 1 mudhal 20 vareyulla ennal padikkum.",
+    voiceLangCode: "ml-IN"
+  },
+  {
+    id: "punjabi",
+    name: "Punjabi",
+    nativeName: "ਪੰਜਾਬੀ (Punjabi)",
+    script: "Gurmukhi",
+    speakersCount: "33 Million",
+    region: "Punjab, Haryana, Delhi",
+    vocabularyCount: "30,000",
+    audioCount: "7,100",
+    lessonsCount: 195,
+    status: "Core Language",
+    capabilities: {
+      textTranslation: { level: "Core", status: "ready", label: "Master (96%)" },
+      speechRecognition: { level: "Core", status: "ready", label: "Native ASR (94%)" },
+      textToSpeech: { level: "Core", status: "ready", label: "Natural TTS (95%)" },
+      offlineSupport: { level: "Core", status: "ready", label: "Installed" },
+      confidenceScore: "95%"
+    },
+    samplePhraseHindi: "बच्चों, आज हम 1 से 20 तक की गिनती सीखेंगे।",
+    samplePhraseTarget: "ਬੱਚਿਓ, ਅੱਜ ਅਸੀਂ 1 ਤੋਂ 20 ਤੱਕ ਗਿਣਤੀ ਸਿੱਖਾਂਗੇ।",
+    transliteration: "Bachiyo, ajj assi 1 ton 20 takk ginti sikhaange.",
+    voiceLangCode: "pa-IN"
+  },
+  {
+    id: "assamese",
+    name: "Assamese",
+    nativeName: "অসমীয়া (Asomiya)",
+    script: "Assamese script",
+    speakersCount: "15 Million",
+    region: "Assam, Northeast India",
+    vocabularyCount: "22,000",
+    audioCount: "5,300",
+    lessonsCount: 160,
+    status: "Available",
+    capabilities: {
+      textTranslation: { level: "Available", status: "ready", label: "Available (93%)" },
+      speechRecognition: { level: "Available", status: "ready", label: "Available (91%)" },
+      textToSpeech: { level: "Available", status: "ready", label: "Available (92%)" },
+      offlineSupport: { level: "Available", status: "ready", label: "Available" },
+      confidenceScore: "92%"
+    },
+    samplePhraseHindi: "बच्चों, आज हम 1 से 20 तक की गिनती सीखेंगे।",
+    samplePhraseTarget: "মৰমৰ ছাত্ৰ-ছাত্ৰীসকল, আজি আমি ১ৰ পৰা ২০ লৈকে গণনা কৰিবলৈ শিকিম।",
+    transliteration: "Moromor shatro-shatrisokol, aji aami 1 pora 20 loike gonona koriboloi xikim.",
+    voiceLangCode: "as-IN"
+  },
+  {
+    id: "maithili",
+    name: "Maithili",
+    nativeName: "मैथिली (Maithili)",
+    script: "Devanagari / Tirhuta",
+    speakersCount: "14 Million",
+    region: "Bihar, Jharkhand",
+    vocabularyCount: "19,500",
+    audioCount: "4,600",
+    lessonsCount: 145,
+    status: "Available",
+    capabilities: {
+      textTranslation: { level: "Available", status: "ready", label: "Available (92%)" },
+      speechRecognition: { level: "Available", status: "ready", label: "Available (90%)" },
+      textToSpeech: { level: "Available", status: "ready", label: "Available (90%)" },
+      offlineSupport: { level: "Available", status: "ready", label: "Available" },
+      confidenceScore: "91%"
+    },
+    samplePhraseHindi: "बच्चों, आज हम 1 से 20 तक की गिनती सीखेंगे।",
+    samplePhraseTarget: "यौ बच्चा सब, आइ हम सब १ सँ २० धरि गिनल सिखब।",
+    transliteration: "Yau bachha sab, aai hum sab 1 sa 20 dhari ginal sikhab.",
+    voiceLangCode: "mai-IN"
+  },
+  {
+    id: "kashmiri",
+    name: "Kashmiri",
+    nativeName: "کٲشُر (Kashmiri)",
+    script: "Nastaliq",
+    speakersCount: "7 Million",
+    region: "Jammu & Kashmir",
+    vocabularyCount: "16,200",
+    audioCount: "3,800",
+    lessonsCount: 120,
+    status: "Available",
+    capabilities: {
+      textTranslation: { level: "Available", status: "ready", label: "Available (90%)" },
+      speechRecognition: { level: "Beta", status: "beta", label: "Beta (87%)" },
+      textToSpeech: { level: "Beta", status: "beta", label: "Beta (88%)" },
+      offlineSupport: { level: "Available", status: "ready", label: "Available" },
+      confidenceScore: "89%"
+    },
+    samplePhraseHindi: "बच्चों, आज हम 1 से 20 तक की गिनती सीखेंगे।",
+    samplePhraseTarget: "بچو، از ہیچھو اسۍ 1 پؠٹھ 20 تانٛتھ گنزراوُن۔",
+    transliteration: "Bachau, az heechhu asi 1 pyeth 20 taanth ganzraawun.",
+    voiceLangCode: "ks-IN"
+  },
+  {
+    id: "konkani",
+    name: "Konkani",
+    nativeName: "कोंकणी (Konkani)",
+    script: "Devanagari / Romi",
+    speakersCount: "2.3 Million",
+    region: "Goa, Konkan, Karnataka",
+    vocabularyCount: "14,800",
+    audioCount: "3,200",
+    lessonsCount: 110,
+    status: "Available",
+    capabilities: {
+      textTranslation: { level: "Available", status: "ready", label: "Available (91%)" },
+      speechRecognition: { level: "Beta", status: "beta", label: "Beta (88%)" },
+      textToSpeech: { level: "Available", status: "ready", label: "Available (89%)" },
+      offlineSupport: { level: "Available", status: "ready", label: "Available" },
+      confidenceScore: "90%"
+    },
+    samplePhraseHindi: "बच्चों, आज हम 1 से 20 तक की गिनती सीखेंगे।",
+    samplePhraseTarget: "भुरग्यांनो, आयज आम्ही १ ते २० मेरेन मेजपाक शिकतले.",
+    transliteration: "Bhurgyanno, aayaj aamhi 1 te 20 meren mejpaak shiktale.",
+    voiceLangCode: "kok-IN"
+  },
+  {
+    id: "manipuri",
+    name: "Manipuri",
+    nativeName: "ꯃꯤᱛᱻᱭᱞꯣꯟ (Meiteilon)",
+    script: "Meetei Mayek / Bengali",
+    speakersCount: "1.8 Million",
+    region: "Manipur, Assam",
+    vocabularyCount: "13,600",
+    audioCount: "2,900",
+    lessonsCount: 95,
+    status: "Available",
+    capabilities: {
+      textTranslation: { level: "Available", status: "ready", label: "Available (89%)" },
+      speechRecognition: { level: "Beta", status: "beta", label: "Beta (86%)" },
+      textToSpeech: { level: "Beta", status: "beta", label: "Beta (87%)" },
+      offlineSupport: { level: "Available", status: "ready", label: "Available" },
+      confidenceScore: "88%"
+    },
+    samplePhraseHindi: "बच्चों, आज हम 1 से 20 तक की गिनती सीखेंगे।",
+    samplePhraseTarget: "ꯑꯉꯥꯡꯁꯤꯡ, ꯉꯁꯤ ꯑꯩꯈꯣꯏꯅꯥ ꯱ ꯗꯒꯤ ꯲꯰ ꯐꯥꯎꯕ ꯃꯁꯤꯡ ꯊꯤꯕ ꯇꯝꯒꯅꯤ।",
+    transliteration: "Angangsing, ngasi eikhoina 1 dagi 20 faoba masing thiba tamgani.",
+    voiceLangCode: "mni-IN"
+  },
+  {
+    id: "nepali",
+    name: "Nepali",
+    nativeName: "नेपाली (Nepali)",
+    script: "Devanagari",
+    speakersCount: "2.9 Million",
+    region: "Sikkim, West Bengal, Assam",
+    vocabularyCount: "21,000",
+    audioCount: "5,100",
+    lessonsCount: 150,
+    status: "Available",
+    capabilities: {
+      textTranslation: { level: "Available", status: "ready", label: "Available (94%)" },
+      speechRecognition: { level: "Available", status: "ready", label: "Available (92%)" },
+      textToSpeech: { level: "Available", status: "ready", label: "Available (93%)" },
+      offlineSupport: { level: "Available", status: "ready", label: "Available" },
+      confidenceScore: "93%"
+    },
+    samplePhraseHindi: "बच्चों, आज हम 1 से 20 तक की गिनती सीखेंगे।",
+    samplePhraseTarget: "नानीहरू, आज हामी १ देखि २० सम्म गन्ती गर्न सिक्नेछौं।",
+    transliteration: "Naniharu, aaja haami 1 dekhi 20 samma ganti garna siknechhaun.",
+    voiceLangCode: "ne-NP"
+  },
+  {
+    id: "bodo",
+    name: "Bodo",
+    nativeName: "बड़ो (Bodo)",
+    script: "Devanagari",
+    speakersCount: "1.5 Million",
+    region: "Bodoland, Assam, Meghalaya",
+    vocabularyCount: "11,800",
+    audioCount: "2,400",
+    lessonsCount: 88,
+    status: "Beta Support",
+    capabilities: {
+      textTranslation: { level: "Available", status: "ready", label: "Available (88%)" },
+      speechRecognition: { level: "Beta", status: "beta", label: "Beta (85%)" },
+      textToSpeech: { level: "Beta", status: "beta", label: "Beta (84%)" },
+      offlineSupport: { level: "Available", status: "ready", label: "Available" },
+      confidenceScore: "86%"
+    },
+    samplePhraseHindi: "बच्चों, आज हम 1 से 20 तक की गिनती सीखेंगे।",
+    samplePhraseTarget: "गथ'फोर, दिनै जों 1 निफ्राय 20 सिम सानजि साननो रोंगोन।",
+    transliteration: "Gothofor, dini jong 1 nifrai 20 sim sanji sanno rongon.",
+    voiceLangCode: "brx-IN"
+  },
+  {
+    id: "dogri",
+    name: "Dogri",
+    nativeName: "डोगरी (Dogri)",
+    script: "Devanagari",
+    speakersCount: "2.6 Million",
+    region: "Jammu & Kashmir, Himachal Pradesh",
+    vocabularyCount: "12,400",
+    audioCount: "2,600",
+    lessonsCount: 92,
+    status: "Beta Support",
+    capabilities: {
+      textTranslation: { level: "Available", status: "ready", label: "Available (89%)" },
+      speechRecognition: { level: "Beta", status: "beta", label: "Beta (86%)" },
+      textToSpeech: { level: "Beta", status: "beta", label: "Beta (85%)" },
+      offlineSupport: { level: "Available", status: "ready", label: "Available" },
+      confidenceScore: "87%"
+    },
+    samplePhraseHindi: "बच्चों, आज हम 1 से 20 तक की गिनती सीखेंगे।",
+    samplePhraseTarget: "बच्चेओ, अज्ज अस 1 थमां 20 तगर गनती सिख्खग।",
+    transliteration: "Bacheo, ajj as 1 thama 20 tagar ganti sikkhag.",
+    voiceLangCode: "doi-IN"
+  },
+  {
+    id: "sanskrit",
+    name: "Sanskrit",
+    nativeName: "संस्कृतम् (Sanskrit)",
+    script: "Devanagari",
+    speakersCount: "Classical Heritage",
+    region: "Pan-India Classical",
+    vocabularyCount: "35,000",
+    audioCount: "6,800",
+    lessonsCount: 165,
+    status: "Available",
+    capabilities: {
+      textTranslation: { level: "Available", status: "ready", label: "Available (95%)" },
+      speechRecognition: { level: "Available", status: "ready", label: "Available (91%)" },
+      textToSpeech: { level: "Available", status: "ready", label: "Available (93%)" },
+      offlineSupport: { level: "Available", status: "ready", label: "Available" },
+      confidenceScore: "93%"
+    },
+    samplePhraseHindi: "बच्चों, आज हम 1 से 20 तक की गिनती सीखेंगे।",
+    samplePhraseTarget: "छात्राः, अद्य वयं १ तः २० पर्यन्तं गणनां शिक्षामहे।",
+    transliteration: "Chhatrah, adya vayam 1 tah 20 paryantam gananam shikshyamahe.",
+    voiceLangCode: "sa-IN"
+  },
+  {
+    id: "sindhi",
+    name: "Sindhi",
+    nativeName: "سنڌي (Sindhi)",
+    script: "Perso-Arabic / Devanagari",
+    speakersCount: "2.8 Million",
+    region: "Gujarat, Rajasthan, Maharashtra",
+    vocabularyCount: "13,200",
+    audioCount: "2,700",
+    lessonsCount: 90,
+    status: "Beta Support",
+    capabilities: {
+      textTranslation: { level: "Available", status: "ready", label: "Available (88%)" },
+      speechRecognition: { level: "Beta", status: "beta", label: "Beta (85%)" },
+      textToSpeech: { level: "Beta", status: "beta", label: "Beta (84%)" },
+      offlineSupport: { level: "Available", status: "ready", label: "Available" },
+      confidenceScore: "86%"
+    },
+    samplePhraseHindi: "बच्चों, आज हम 1 से 20 तक की गिनती सीखेंगे।",
+    samplePhraseTarget: "ٻارئو، اڄ اسين 1 کان 20 تائين ڳڻپ سکنداسين.",
+    transliteration: "Baaryo, aaj aseen 1 khaan 20 taaeen ganap sikhandaaseen.",
+    voiceLangCode: "sd-IN"
+  },
+  {
+    id: "kurukh",
+    name: "Kurukh / Oraon",
+    nativeName: "कुड़ुख़ / ᱛᱚᱞᱚᱝ ᱥᱤᱠᱤ",
+    script: "Tolong Siki / Devanagari",
+    speakersCount: "2.1 Million",
+    region: "Jharkhand, Odisha, Chhattisgarh",
+    vocabularyCount: "9,600",
+    audioCount: "2,100",
+    lessonsCount: 84,
+    status: "Beta Support",
+    capabilities: {
+      textTranslation: { level: "Available", status: "ready", label: "Available (87%)" },
+      speechRecognition: { level: "Beta", status: "beta", label: "Beta (84%)" },
+      textToSpeech: { level: "Beta", status: "beta", label: "Beta (83%)" },
+      offlineSupport: { level: "Available", status: "ready", label: "Available" },
+      confidenceScore: "85%"
+    },
+    samplePhraseHindi: "बच्चों, आज हम 1 से 20 तक की गिनती सीखेंगे।",
+    samplePhraseTarget: "खद्दर, इन्न नंना १ ती २० गुट्टी गनना सीखोब।",
+    transliteration: "Khaddar, inna nanna 1 tee 20 gutti ganna seekhob.",
+    voiceLangCode: "kru-IN"
+  },
+  {
+    id: "gondi",
+    name: "Gondi",
+    nativeName: "गोण्डी (Gondi)",
+    script: "Gunjala Gondi / Devanagari",
+    speakersCount: "3.0 Million",
+    region: "Madhya Pradesh, Chhattisgarh, Maharashtra, Odisha",
+    vocabularyCount: "9,100",
+    audioCount: "1,950",
+    lessonsCount: 80,
+    status: "Beta Support",
+    capabilities: {
+      textTranslation: { level: "Available", status: "ready", label: "Available (86%)" },
+      speechRecognition: { level: "Beta", status: "beta", label: "Beta (83%)" },
+      textToSpeech: { level: "Beta", status: "beta", label: "Beta (82%)" },
+      offlineSupport: { level: "Available", status: "ready", label: "Available" },
+      confidenceScore: "84%"
+    },
+    samplePhraseHindi: "बच्चों, आज हम 1 से 20 तक की गिनती सीखेंगे।",
+    samplePhraseTarget: "पिल्लालोर, नेण्ड ममोत १ सी २० तग लेक्का कीना हिक्काट।",
+    transliteration: "Pillalor, nend mamot 1 see 20 tag lekka keena hikkaat.",
+    voiceLangCode: "gon-IN"
   }
 ];
 
@@ -833,6 +1343,15 @@ export const OFFLINE_MODELS = [
     details: "NIPUN Bharat foundational learning outcomes and local stories."
   },
   {
+    name: "Odia Neural Speech & Pedagogy Model (quantized v2.1)",
+    type: "Machine Translation + TTS",
+    size: "440 MB",
+    status: "Installed",
+    active: true,
+    lastUpdate: "Oct 12, 2026",
+    details: "High-accuracy quantized transformer for Odia script speech recognition & pedagogy."
+  },
+  {
     name: "Ho & Mundari Linguistic Pack (Beta)",
     type: "Language Pack",
     size: "390 MB",
@@ -842,6 +1361,66 @@ export const OFFLINE_MODELS = [
     details: "Vocabulary and basic speech phonetics for Ho and Mundari."
   }
 ];
+
+export const getLanguageById = (id) => {
+  return SUPPORTED_LANGUAGES.find(l => l.id === id) || SUPPORTED_LANGUAGES[0];
+};
+
+export const getClassroomTranslation = (preset, langId) => {
+  if (!preset) return { targetText: "", latin: "", studentReply: "", studentReplyLatin: "" };
+
+  if (langId === 'odia') {
+    if (preset.id === 'c1') {
+      return {
+        targetText: "ପିଲାମାନେ, ଆଜି ଆମେ ୧ ରୁ ୨୦ ପର୍ଯ୍ୟନ୍ତ ଗଣିବା ଶିଖିବା।",
+        latin: "Pilamane, aji ame 1 ru 20 parjyanta ganiba sikhiba.",
+        studentReply: "ମ୍ୟାଡାମ, ମୁଁ ୧୦ ଯାଏଁ ଗଣିପାରୁଛି, କିନ୍ତୁ ୧୫ ରେ ଅଟକି ଯାଉଛି।",
+        studentReplyLatin: "Madam, mun 10 jaen ganiparuchhi, kintu 15 re ataki jauchhi."
+      };
+    }
+    if (preset.id === 'c2') {
+      return {
+        targetText: "ଆପଣଙ୍କ ବହିରେ ପୃଷ୍ଠା ସଂଖ୍ୟା ୧୪ ଖୋଲନ୍ତୁ ଏବଂ ଚିତ୍ରଗୁଡ଼ିକୁ ଦେଖନ୍ତୁ।",
+        latin: "Aapananka bahire prushtha sankhya 14 kholantu ebam chitragudiku dekhantu.",
+        studentReply: "ମୋତେ ଚିତ୍ରରେ ତିନୋଟି ବତକ ଏବଂ ଗୋଟିଏ ମାଛ ଦେଖାଯାଉଛି!",
+        studentReplyLatin: "Mote chintrare tinoti bataka ebam gotie machha dekhayauchhi!"
+      };
+    }
+    return {
+      targetText: "ଯଦି ଆପଣଙ୍କ ପାଖରେ ୫ଟି ଆମ୍ବ ଅଛି ଏବଂ ୨ଟି ଆମ୍ବ ସାଙ୍ଗକୁ ଦେଲେ, ତେବେ କେତୋଟି ବଳିଲା?",
+      latin: "Jadi aapananka pakhare 5ti amba achhi ebam 2ti amba sangaku dele, tebe ketoti balila?",
+      studentReply: "ତିନୋଟି ଆମ୍ବ ବଳିଲା, ମ୍ୟାଡାମ!",
+      studentReplyLatin: "Tinoti amba balila, Madam!"
+    };
+  }
+
+  if (langId === 'hindi') {
+    return {
+      targetText: preset.teacherHindi,
+      latin: preset.teacherHindi,
+      studentReply: preset.studentReplyHindi,
+      studentReplyLatin: preset.studentReplyHindi
+    };
+  }
+
+  const lang = SUPPORTED_LANGUAGES.find(l => l.id === langId);
+  if (lang && lang.id !== 'santhali') {
+    return {
+      targetText: lang.samplePhraseTarget,
+      latin: lang.transliteration,
+      studentReply: lang.samplePhraseTarget,
+      studentReplyLatin: lang.transliteration
+    };
+  }
+
+  // Default to Santhali Ol Chiki
+  return {
+    targetText: preset.santhaliOlChiki,
+    latin: preset.santhaliLatin,
+    studentReply: preset.studentReplySanthali,
+    studentReplyLatin: preset.studentReplyLatin
+  };
+};
 
 export const SYNC_QUEUE = [
   {

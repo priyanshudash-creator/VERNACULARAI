@@ -21,9 +21,6 @@ export default function AppLayout() {
 
   return (
     <div className="min-h-screen bg-[#F7F9FC] dark:bg-[#0B1220] flex flex-col text-navy-900 dark:text-[#F8FAFC]">
-      {/* Top SIH Hackathon Evaluation Walkthrough Banner */}
-      <DemoTourBanner />
-
       <div className="flex-1 flex relative">
         {/* Sidebar */}
         <Sidebar

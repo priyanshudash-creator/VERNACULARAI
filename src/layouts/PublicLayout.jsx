@@ -10,9 +10,6 @@ export default function PublicLayout() {
 
   return (
     <div className="min-h-screen bg-[#F7F9FC] dark:bg-[#0B1220] flex flex-col text-navy-900 dark:text-[#F8FAFC]">
-      {/* Top Hackathon Demo Walkthrough */}
-      <DemoTourBanner />
-
       {/* Public Navbar */}
       <nav className="border-b border-navy-200 dark:border-darkborder bg-white/90 dark:bg-darkcard/90 backdrop-blur-md sticky top-0 z-30 px-4 sm:px-8 py-3.5 flex items-center justify-between">
         <Logo size="md" showTagline={true} to="/" />
@@ -59,17 +56,21 @@ export default function PublicLayout() {
             <p className="text-navy-600 dark:text-navy-300 leading-relaxed text-[11px]">
               AI-Powered Vernacular Pedagogy and Real-Time Translation Tool for Mother Tongue-Based Primary Education.
             </p>
-            <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-brand-50 dark:bg-brand-950/80 text-brand-700 dark:text-brand-300 border border-brand-200 dark:border-brand-800 text-[10px] font-semibold">
-              <ShieldCheck className="w-3.5 h-3.5 text-brand-600" />
-              Smart India Hackathon 2026 • PS ID: 26042
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-brand-50 dark:bg-brand-950/80 text-brand-700 dark:text-brand-300 border border-brand-200 dark:border-brand-800 text-[10px] font-semibold">
+              <Globe className="w-3.5 h-3.5 text-brand-600" />
+              26 Vernacular & Regional Languages Supported
             </div>
           </div>
 
           <div>
             <h5 className="font-bold text-navy-900 dark:text-white mb-2.5 uppercase tracking-wider text-[11px]">
-              Primary Languages
+              Supported Languages (26)
             </h5>
             <ul className="space-y-1.5 text-[11px]">
+              <li className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                <span>Odia (ଓଡ଼ିଆ) — Core Language</span>
+              </li>
               <li className="flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                 <span>Hindi (हिन्दी) — Medium of Instruction</span>
@@ -80,11 +81,7 @@ export default function PublicLayout() {
               </li>
               <li className="flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-                <span>Ho (ᱦᱳ) — Warang Chiti / Devanagari</span>
-              </li>
-              <li className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-                <span>Mundari (ᱢᱩᱱᱰᱟᱨᱤ) — Bani Hisir</span>
+                <span>Ho, Mundari, Bengali, Telugu & 20 More</span>
               </li>
             </ul>
           </div>
@@ -107,10 +104,10 @@ export default function PublicLayout() {
               National Alignment
             </h5>
             <p className="text-[11px] leading-relaxed text-navy-600 dark:text-navy-300 mb-2">
-              Designed in alignment with <strong>NEP 2020</strong> mother tongue education recommendations and <strong>NIPUN Bharat FLN</strong> targets for tribal belt schools.
+              Designed in alignment with <strong>NEP 2020</strong> mother tongue education recommendations and <strong>NIPUN Bharat FLN</strong> targets for regional and tribal classrooms.
             </p>
             <p className="text-[10px] text-navy-400">
-              © 2026 VernacularAI. Proposed Smart India Hackathon Solution.
+              © 2026 VernacularAI. Mother Tongue-Based Primary Education Platform.
             </p>
           </div>
         </div>

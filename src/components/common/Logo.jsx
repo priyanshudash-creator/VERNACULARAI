@@ -40,9 +40,6 @@ export default function Logo({ size = 'md', showTagline = false, to = '/dashboar
           <span className={`font-bold tracking-tight text-navy-900 dark:text-white ${textSizes[size]}`}>
             VERNACULAR<span className="text-brand-600 dark:text-brand-400">AI</span>
           </span>
-          <span className="px-1.5 py-0.5 text-[10px] font-semibold bg-brand-100 dark:bg-brand-950/80 text-brand-700 dark:text-brand-300 rounded border border-brand-200 dark:border-brand-800 tracking-wide">
-            SIH 2026
-          </span>
         </div>
         {showTagline && (
           <span className="text-[11px] font-medium text-navy-500 dark:text-navy-400">

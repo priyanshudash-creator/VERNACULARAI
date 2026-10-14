@@ -56,17 +56,18 @@ class AudioSynthesizer {
 
     // Pick best matching voice
     const voices = this.synth.getVoices();
-    const hindiVoice = voices.find(v => v.lang.includes('hi') || v.lang.includes('IN'));
-    if (hindiVoice) {
-      utterance.voice = hindiVoice;
-    }
-
-    if (lang.includes('hi')) {
-      utterance.lang = 'hi-IN';
+    const cleanLangCode = lang.toLowerCase().split('-')[0];
+    const matchedVoice = voices.find(v => v.lang.toLowerCase().includes(cleanLangCode) || (lang.includes('IN') && v.lang.includes('IN')));
+    if (matchedVoice) {
+      utterance.voice = matchedVoice;
+      utterance.lang = matchedVoice.lang;
     } else {
-      // For tribal languages, fallback to standard or phonetics
-      utterance.lang = 'hi-IN';
-      utterance.rate = 0.82; // slightly slower for instructional clarity
+      const fallbackIndianVoice = voices.find(v => v.lang.includes('hi') || v.lang.includes('IN'));
+      if (fallbackIndianVoice) {
+        utterance.voice = fallbackIndianVoice;
+      }
+      utterance.lang = lang || 'hi-IN';
+      utterance.rate = 0.84; // Instructional clarity
     }
 
     if (onStart) utterance.onstart = onStart;

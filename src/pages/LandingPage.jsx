@@ -94,12 +94,6 @@ export default function LandingPage() {
       {/* Hero Section */}
       <section className="relative pt-12 md:pt-20 px-4 sm:px-8 max-w-7xl mx-auto">
         <div className="text-center max-w-4xl mx-auto space-y-6">
-          {/* SIH 2026 Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-100 dark:bg-brand-950/80 border border-brand-300 dark:border-brand-800 text-brand-800 dark:text-brand-300 text-xs font-semibold shadow-xs">
-            <span className="w-2 h-2 rounded-full bg-brand-500 animate-ping"></span>
-            <span>Smart India Hackathon 2026 • Problem Statement ID: 26042</span>
-          </div>
-
           {/* Main Tagline */}
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-navy-950 dark:text-white leading-[1.15]">
             Teach in Hindi. <br />

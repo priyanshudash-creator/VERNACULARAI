@@ -67,10 +67,6 @@ export default function HowItWorksPage() {
     <div className="space-y-12 max-w-6xl mx-auto py-8 px-4 sm:px-6">
       {/* Page Header */}
       <div className="text-center max-w-3xl mx-auto space-y-4">
-        <span className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-brand-100 dark:bg-brand-950 text-brand-800 dark:text-brand-300 border border-brand-200 dark:border-brand-800">
-          Smart India Hackathon 2026 • Problem Statement ID: 26042
-        </span>
-
         <h1 className="text-3xl sm:text-5xl font-black text-navy-950 dark:text-white tracking-tight leading-tight">
           System Architecture & Data Flow
         </h1>

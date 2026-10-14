@@ -69,11 +69,6 @@ export default function LoginPage() {
           <div className="absolute top-0 right-0 w-80 h-80 bg-brand-500/10 rounded-full blur-2xl pointer-events-none"></div>
 
           <div className="space-y-6 relative z-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-amber-300 text-xs font-semibold border border-white/15">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Smart India Hackathon 2026 • PS 26042</span>
-            </div>
-
             <div>
               <h2 className="text-2xl sm:text-3xl font-extrabold leading-snug">
                 Teach in Hindi. <br />
@@ -137,11 +132,11 @@ export default function LoginPage() {
             </p>
           </div>
 
-          {/* Quick Demo Credentials Fill Button for Hackathon Evaluators */}
+          {/* Quick Demo Credentials Fill Button */}
           <div className="p-3 rounded-2xl bg-brand-50 dark:bg-brand-950/40 border border-brand-200 dark:border-brand-800 flex items-center justify-between">
             <div className="text-xs">
               <span className="font-bold text-brand-900 dark:text-brand-300 block">
-                Evaluator Demo Profile:
+                Demo Teacher Profile:
               </span>
               <span className="text-[11px] text-brand-700 dark:text-brand-400">
                 Sunita Kumari (Grade 2 • GPS Dumka)

@@ -33,9 +33,9 @@ export default function DemoTourBanner() {
             <Award className="w-3.5 h-3.5" />
           </span>
           <div className="flex items-center gap-2">
-            <span className="font-bold text-amber-300">SIH 2026 Evaluation Tour:</span>
+            <span className="font-bold text-amber-300">Platform Tour:</span>
             <span className="text-slate-300 hidden sm:inline">
-              Problem 26042 • Mother Tongue-Based Vernacular Pedagogy
+              Mother Tongue-Based Vernacular Pedagogy (26 Languages)
             </span>
           </div>
         </div>

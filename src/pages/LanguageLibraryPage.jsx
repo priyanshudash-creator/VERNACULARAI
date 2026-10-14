@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { SUPPORTED_LANGUAGES } from '../data/mockData';
 import { speechSynthesizer } from '../utils/speechUtils';
 import {
@@ -11,13 +11,29 @@ import {
   ShieldCheck,
   Globe,
   Layers,
-  ArrowRight
+  ArrowRight,
+  Search
 } from 'lucide-react';
 
 export default function LanguageLibraryPage() {
-  const handlePlaySample = (phrase) => {
-    speechSynthesizer.speak(phrase, { lang: 'hi-IN' });
+  const [search, setSearch] = useState('');
+  const [filter, setFilter] = useState('all'); // all, core, regional
+
+  const handlePlaySample = (phrase, voiceCode) => {
+    speechSynthesizer.speak(phrase, { lang: voiceCode || 'hi-IN' });
   };
+
+  const filteredLanguages = SUPPORTED_LANGUAGES.filter((lang) => {
+    const matchesSearch =
+      lang.name.toLowerCase().includes(search.toLowerCase()) ||
+      lang.nativeName.toLowerCase().includes(search.toLowerCase()) ||
+      lang.region.toLowerCase().includes(search.toLowerCase()) ||
+      lang.script.toLowerCase().includes(search.toLowerCase());
+
+    if (filter === 'core') return matchesSearch && (lang.status === 'Core Language');
+    if (filter === 'regional') return matchesSearch && (lang.status !== 'Core Language');
+    return matchesSearch;
+  });
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12">
@@ -29,25 +45,72 @@ export default function LanguageLibraryPage() {
               <BookMarked className="w-5 h-5 text-brand-600" />
             </span>
             <h1 className="text-xl sm:text-2xl font-extrabold text-navy-950 dark:text-white">
-              Tribal Language Library & Smart AI Confidence
+              Vernacular & Regional Language Library (26 Languages)
             </h1>
             <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300">
-              Section 11 & 51
+              Odia Included
             </span>
           </div>
           <p className="text-xs text-navy-500 dark:text-navy-400">
-            Acoustic vocabulary corpora, native scripts (Ol Chiki, Warang Chiti, Bani Hisir), and prototype AI model readiness indicators.
+            Acoustic vocabulary corpora, native scripts (Odia, Ol Chiki, Devanagari, Warang Chiti, Bengali, Telugu, etc.), and quantized AI model readiness indicators.
           </p>
         </div>
 
         <div className="text-xs font-medium text-navy-500 bg-navy-50 dark:bg-navy-950 p-2.5 rounded-xl border border-navy-200 dark:border-darkborder">
-          Status: <strong>4 Linguistic Models Quantized for Offline Edge</strong>
+          Status: <strong>26 Linguistic Models Ready for Classroom Use</strong>
         </div>
       </div>
 
-      {/* Language Cards Grid (Section 51) */}
+      {/* Search & Filter Bar */}
+      <div className="p-4 rounded-2xl bg-white dark:bg-darkcard border border-navy-200 dark:border-darkborder shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="relative flex-1 max-w-md">
+          <Search className="w-4 h-4 text-navy-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search language, script, or state (e.g. Odia, Santhali)..."
+            className="w-full pl-9 pr-3 py-2 text-xs rounded-xl bg-navy-50 dark:bg-navy-950 border border-navy-200 dark:border-darkborder text-navy-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-brand-500"
+          />
+        </div>
+
+        <div className="flex items-center gap-1.5 overflow-x-auto text-xs">
+          <button
+            onClick={() => setFilter('all')}
+            className={`px-3 py-1.5 rounded-xl font-semibold transition-colors ${
+              filter === 'all'
+                ? 'bg-brand-600 text-white shadow-xs'
+                : 'bg-navy-100 dark:bg-navy-800 text-navy-700 dark:text-navy-300'
+            }`}
+          >
+            All Languages (26)
+          </button>
+          <button
+            onClick={() => setFilter('core')}
+            className={`px-3 py-1.5 rounded-xl font-semibold transition-colors ${
+              filter === 'core'
+                ? 'bg-brand-600 text-white shadow-xs'
+                : 'bg-navy-100 dark:bg-navy-800 text-navy-700 dark:text-navy-300'
+            }`}
+          >
+            Core Languages (11)
+          </button>
+          <button
+            onClick={() => setFilter('regional')}
+            className={`px-3 py-1.5 rounded-xl font-semibold transition-colors ${
+              filter === 'regional'
+                ? 'bg-brand-600 text-white shadow-xs'
+                : 'bg-navy-100 dark:bg-navy-800 text-navy-700 dark:text-navy-300'
+            }`}
+          >
+            Regional & Indigenous (15)
+          </button>
+        </div>
+      </div>
+
+      {/* Language Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {SUPPORTED_LANGUAGES.map((lang) => (
+        {filteredLanguages.map((lang) => (
           <div
             key={lang.id}
             className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-darkcard border border-navy-200 dark:border-darkborder shadow-sm space-y-6 flex flex-col justify-between"
@@ -146,7 +209,7 @@ export default function LanguageLibraryPage() {
 
             <div className="pt-4 border-t border-navy-100 dark:border-darkborder/50 flex items-center justify-between">
               <button
-                onClick={() => handlePlaySample(lang.transliteration)}
+                onClick={() => handlePlaySample(lang.transliteration, lang.voiceLangCode)}
                 className="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-navy-950 font-bold text-xs flex items-center gap-1.5 shadow-sm transition-transform hover:scale-105"
               >
                 <Volume2 className="w-3.5 h-3.5" />
