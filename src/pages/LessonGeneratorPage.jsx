@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useOffline } from '../context/OfflineContext';
+import { SUPPORTED_LANGUAGES } from '../data/mockData';
 import AIContentCheckModal from '../components/common/AIContentCheckModal';
 import { speechSynthesizer } from '../utils/speechUtils';
 import {
@@ -156,9 +157,11 @@ export default function LessonGeneratorPage() {
               onChange={(e) => setFormData({ ...formData, targetLanguage: e.target.value })}
               className="w-full px-3 py-2 text-xs bg-navy-50 dark:bg-navy-950/60 border border-navy-200 dark:border-darkborder rounded-xl text-navy-900 dark:text-white"
             >
-              <option value="Santhali">Santhali (Ol Chiki)</option>
-              <option value="Ho">Ho (Warang Chiti)</option>
-              <option value="Mundari">Mundari (Bani Hisir)</option>
+              {SUPPORTED_LANGUAGES.map(lang => (
+                <option key={lang.id} value={lang.name}>
+                  {lang.name} ({lang.nativeName.split(' ')[0]})
+                </option>
+              ))}
             </select>
           </div>
 

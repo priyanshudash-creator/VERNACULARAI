@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { useOffline } from '../context/OfflineContext';
+import { SUPPORTED_LANGUAGES } from '../data/mockData';
 import {
   Settings,
   User,
@@ -246,11 +247,13 @@ export default function SettingsPage() {
                   <select
                     value={profileData.primaryLanguage}
                     onChange={(e) => setProfileData({ ...profileData, primaryLanguage: e.target.value })}
-                    className="px-3 py-1.5 rounded-lg bg-white dark:bg-darkcard border border-navy-200 dark:border-darkborder font-bold text-brand-600"
+                    className="px-3 py-1.5 rounded-lg bg-white dark:bg-darkcard border border-navy-200 dark:border-darkborder font-bold text-brand-600 text-xs"
                   >
-                    <option value="Santhali">Santhali (Ol Chiki)</option>
-                    <option value="Ho">Ho (Warang Chiti)</option>
-                    <option value="Mundari">Mundari (Bani Hisir)</option>
+                    {SUPPORTED_LANGUAGES.map(lang => (
+                      <option key={lang.id} value={lang.name}>
+                        {lang.name} ({lang.nativeName.split(' ')[0]})
+                      </option>
+                    ))}
                   </select>
                 </div>
 

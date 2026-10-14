@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { WORKSHEETS_DATA } from '../data/mockData';
+import { WORKSHEETS_DATA, SUPPORTED_LANGUAGES } from '../data/mockData';
 import { useOffline } from '../context/OfflineContext';
 import { speechSynthesizer } from '../utils/speechUtils';
 import {
@@ -138,9 +138,11 @@ export default function WorksheetsPage() {
               onChange={(e) => setFormConfig({ ...formConfig, language: e.target.value })}
               className="w-full px-2.5 py-1.5 rounded-lg bg-navy-50 dark:bg-navy-950 border border-navy-200 dark:border-darkborder"
             >
-              <option value="Santhali">Santhali</option>
-              <option value="Ho">Ho</option>
-              <option value="Mundari">Mundari</option>
+              {SUPPORTED_LANGUAGES.map(lang => (
+                <option key={lang.id} value={lang.name}>
+                  {lang.name} ({lang.nativeName.split(' ')[0]})
+                </option>
+              ))}
             </select>
           </div>
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LOCAL_STORIES } from '../data/mockData';
+import { LOCAL_STORIES, SUPPORTED_LANGUAGES } from '../data/mockData';
 import { speechSynthesizer } from '../utils/speechUtils';
 import { useOffline } from '../context/OfflineContext';
 import {
@@ -167,9 +167,11 @@ export default function AIStoriesPage() {
               onChange={(e) => setForm({ ...form, language: e.target.value })}
               className="w-full px-3 py-2 rounded-xl bg-navy-50 dark:bg-navy-950 border border-navy-200 dark:border-darkborder"
             >
-              <option value="Santhali">Santhali</option>
-              <option value="Ho">Ho</option>
-              <option value="Mundari">Mundari</option>
+              {SUPPORTED_LANGUAGES.map(lang => (
+                <option key={lang.id} value={lang.name}>
+                  {lang.name} ({lang.nativeName.split(' ')[0]})
+                </option>
+              ))}
             </select>
           </div>
 

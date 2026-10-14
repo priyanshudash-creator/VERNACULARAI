@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { SUPPORTED_LANGUAGES } from '../../data/mockData';
 import {
   User,
   Mail,
@@ -38,7 +39,7 @@ export default function RegisterPage() {
 
   const states = ['Jharkhand', 'Odisha', 'West Bengal', 'Chhattisgarh', 'Other'];
   const grades = ['Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5'];
-  const languages = ['Santhali', 'Ho', 'Mundari', 'Hindi'];
+  const languages = SUPPORTED_LANGUAGES.map(l => l.name);
 
   const handleChange = (e) => {
     setFormData(prev => ({

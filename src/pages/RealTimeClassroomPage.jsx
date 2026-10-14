@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
-import { CLASSROOM_PRESETS, SUPPORTED_LANGUAGES } from '../data/mockData';
+import { CLASSROOM_PRESETS, SUPPORTED_LANGUAGES, getClassroomTranslation, getLanguageById } from '../data/mockData';
 import { speechSynthesizer } from '../utils/speechUtils';
 import { useOffline } from '../context/OfflineContext';
 import {
@@ -31,14 +31,16 @@ export default function RealTimeClassroomPage() {
   const [currentPresetIndex, setCurrentPresetIndex] = useState(0);
   const activePreset = CLASSROOM_PRESETS[currentPresetIndex];
 
+  const currentLangObj = getLanguageById(activeLanguage);
+  const currentTranslation = getClassroomTranslation(activePreset, activeLanguage);
+
   // Speech & Translation State
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [currentPipelineStage, setCurrentPipelineStage] = useState(0); // 0: idle, 1: listening, 2: understanding, 3: LO detect, 4: translating, 5: TTS, 6: done
   const [teacherInputHindi, setTeacherInputHindi] = useState(activePreset.teacherHindi);
   const [translatedResult, setTranslatedResult] = useState({
-    olChiki: activePreset.santhaliOlChiki,
-    latin: activePreset.santhaliLatin,
+    olChiki: currentTranslation.targetText,
+    latin: currentTranslation.latin,
     outcome: activePreset.learningOutcome,
     processingTime: activePreset.processingTime
   });
@@ -49,34 +51,26 @@ export default function RealTimeClassroomPage() {
   const [savedOfflineAlert, setSavedOfflineAlert] = useState(false);
   const [direction, setDirection] = useState('teacher-to-student'); // 'teacher-to-student' or 'student-to-teacher'
 
-  const stages = [
-    "Listening (Acoustic ASR)",
-    "Understanding (Hindi NLP)",
-    "Learning Outcome Detection",
-    "Translating to Santhali",
-    "Generating Audio (TTS)"
-  ];
-
-  // Update text when preset changes
+  // Update text when preset or language changes
   useEffect(() => {
+    const trans = getClassroomTranslation(activePreset, activeLanguage);
     setTeacherInputHindi(activePreset.teacherHindi);
     setTranslatedResult({
-      olChiki: activePreset.santhaliOlChiki,
-      latin: activePreset.santhaliLatin,
+      olChiki: trans.targetText,
+      latin: trans.latin,
       outcome: activePreset.learningOutcome,
       processingTime: activePreset.processingTime
     });
-  }, [currentPresetIndex]);
+  }, [currentPresetIndex, activeLanguage]);
 
   const handleStartRecording = () => {
     setIsRecording(true);
     speechSynthesizer.playAcousticChime(580, 0.2);
 
-    // Simulate 2 seconds of listening then processing pipeline
     setTimeout(() => {
       setIsRecording(false);
       runAIPipeline();
-    }, 2000);
+    }, 1500);
   };
 
   const handleStopRecording = () => {
@@ -86,29 +80,23 @@ export default function RealTimeClassroomPage() {
 
   const runAIPipeline = () => {
     setIsProcessing(true);
-    setCurrentPipelineStage(1);
-
-    setTimeout(() => setCurrentPipelineStage(2), 350);
-    setTimeout(() => setCurrentPipelineStage(3), 700);
-    setTimeout(() => setCurrentPipelineStage(4), 1100);
-    setTimeout(() => setCurrentPipelineStage(5), 1450);
 
     setTimeout(() => {
       setIsProcessing(false);
-      setCurrentPipelineStage(6);
+      const trans = getClassroomTranslation(activePreset, activeLanguage);
       setTranslatedResult({
-        olChiki: activePreset.santhaliOlChiki,
-        latin: activePreset.santhaliLatin,
+        olChiki: trans.targetText,
+        latin: trans.latin,
         outcome: activePreset.learningOutcome,
         processingTime: activePreset.processingTime
       });
 
       // Auto-play audio once translation finishes
-      playSanthaliAudio();
-    }, 1800);
+      playTargetAudio();
+    }, 800);
   };
 
-  const playSanthaliAudio = (rate = isSlowMode ? 0.7 : 0.88) => {
+  const playTargetAudio = (rate = isSlowMode ? 0.7 : 0.88) => {
     if (isPlayingAudio) {
       speechSynthesizer.stop();
       setIsPlayingAudio(false);
@@ -116,8 +104,8 @@ export default function RealTimeClassroomPage() {
     }
 
     setIsPlayingAudio(true);
-    speechSynthesizer.speak(translatedResult.latin, {
-      lang: 'hi-IN',
+    speechSynthesizer.speak(translatedResult.latin || translatedResult.olChiki, {
+      lang: currentLangObj?.voiceLangCode || 'hi-IN',
       rate: rate,
       onEnd: () => setIsPlayingAudio(false)
     });
@@ -161,7 +149,7 @@ export default function RealTimeClassroomPage() {
               Grade 2
             </span>
             <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-brand-100 dark:bg-brand-950 text-brand-700 dark:text-brand-300">
-              Santhali
+              {currentLangObj.name}
             </span>
           </div>
           <p className="text-xs text-navy-500 dark:text-navy-400">
@@ -305,7 +293,7 @@ export default function RealTimeClassroomPage() {
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-full bg-emerald-500"></div>
                 <h3 className="font-bold text-sm text-navy-950 dark:text-white uppercase tracking-wider">
-                  Student — Santhali ( Ol Chiki )
+                  Student — {currentLangObj.name} ({currentLangObj.script})
                 </h3>
               </div>
               <span className="text-[11px] font-bold text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950 px-2 py-0.5 rounded-full border border-brand-200 dark:border-brand-800">
@@ -348,7 +336,7 @@ export default function RealTimeClassroomPage() {
                 <button
                   onClick={() => {
                     setIsSlowMode(!isSlowMode);
-                    playSanthaliAudio(isSlowMode ? 0.88 : 0.65);
+                    playTargetAudio(isSlowMode ? 0.88 : 0.65);
                   }}
                   className={`px-3 py-2 rounded-xl text-xs font-semibold border transition-colors ${
                     isSlowMode
@@ -383,46 +371,6 @@ export default function RealTimeClassroomPage() {
             <span>Latency: <strong>{translatedResult.processingTime}</strong></span>
             <span>Acoustic engine: <strong>Ol Chiki v2.4 (Offline)</strong></span>
           </div>
-        </div>
-      </div>
-
-      {/* AI Processing Pipeline Progress Bar (Section 29) */}
-      <div className="p-5 rounded-3xl bg-white dark:bg-darkcard border border-navy-200 dark:border-darkborder shadow-sm space-y-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="p-1 rounded-md bg-brand-500/20 text-brand-600">
-              <Sparkles className="w-4 h-4 text-amber-500" />
-            </span>
-            <span className="text-xs font-bold text-navy-950 dark:text-white uppercase tracking-wider">
-              AI Processing Pipeline
-            </span>
-          </div>
-          <span className="text-xs font-mono font-bold text-brand-600 dark:text-brand-400">
-            {isProcessing ? `Step ${currentPipelineStage}/5: ${stages[currentPipelineStage - 1]}` : "AI Processing Time: 1.6s"}
-          </span>
-        </div>
-
-        <div className="grid grid-cols-5 gap-2">
-          {stages.map((stg, idx) => {
-            const stepNum = idx + 1;
-            const isCompleted = currentPipelineStage > stepNum || !isProcessing;
-            const isCurrent = isProcessing && currentPipelineStage === stepNum;
-            return (
-              <div
-                key={idx}
-                className={`p-2.5 rounded-xl border text-center transition-all ${
-                  isCurrent
-                    ? 'bg-brand-600 text-white border-brand-500 shadow-md scale-102 animate-pulse'
-                    : isCompleted
-                    ? 'bg-brand-50 dark:bg-brand-950/40 text-brand-800 dark:text-brand-300 border-brand-200 dark:border-brand-800'
-                    : 'bg-navy-50 dark:bg-navy-950/40 text-navy-400 border-navy-200 dark:border-darkborder'
-                }`}
-              >
-                <div className="text-[10px] font-mono font-bold mb-0.5">0{stepNum}</div>
-                <div className="text-[11px] font-semibold leading-tight">{stg}</div>
-              </div>
-            );
-          })}
         </div>
       </div>
 
