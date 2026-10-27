@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { SUPPORTED_LANGUAGES } from '../data/mockData';
 import { speechSynthesizer } from '../utils/speechUtils';
+import translationService from '../services/translationService';
 import {
   Languages,
   Mic,
@@ -19,7 +20,9 @@ import {
   Radio,
   Play,
   RotateCcw,
-  Edit3
+  Edit3,
+  AlertCircle,
+  Loader2
 } from 'lucide-react';
 
 export default function AITranslatorPage() {
@@ -29,6 +32,7 @@ export default function AITranslatorPage() {
   const [translatedText, setTranslatedText] = useState('ପିଲାମାନେ, ଆଜି ଆମେ ୧ ରୁ ୨୦ ପର୍ଯ୍ୟନ୍ତ ଗଣିବା ଶିଖିବା।');
   const [transliteration, setTransliteration] = useState('Pilamane, aji ame 1 ru 20 parjyanta ganiba sikhiba.');
   const [isTranslating, setIsTranslating] = useState(false);
+  const [translationError, setTranslationError] = useState('');
   const [copied, setCopied] = useState(false);
   const [saved, setSaved] = useState(false);
   const [mode, setMode] = useState('text'); // 'text' or 'voice'
@@ -46,7 +50,7 @@ export default function AITranslatorPage() {
 
   const [history, setHistory] = useState([
     {
-      id: 1,
+      id: 'seed-1',
       source: "बच्चों, आज हम 1 से 20 तक की गिनती सीखेंगे।",
       target: "ପିଲାମାନେ, ଆଜି ଆମେ ୧ ରୁ ୨୦ ପର୍ଯ୍ୟନ୍ତ ଗଣିବା ଶିଖିବା।",
       transliteration: "Pilamane, aji ame 1 ru 20 parjyanta ganiba sikhiba.",
@@ -54,7 +58,7 @@ export default function AITranslatorPage() {
       time: "5 mins ago"
     },
     {
-      id: 2,
+      id: 'seed-2',
       source: "अपनी-अपनी किताबों में पृष्ठ संख्या 14 खोलिए और चित्रों को देखिए।",
       target: "ଆପଣଙ୍କ ବହିରେ ପୃଷ୍ଠା ସଂଖ୍ୟା ୧୪ ଖୋଲନ୍ତୁ ଏବଂ ଚିତ୍ରଗୁଡ଼ିକୁ ଦେଖନ୍ତୁ।",
       transliteration: "Aapananka bahire prushtha sankhya 14 kholantu ebam chitragudiku dekhantu.",
@@ -62,7 +66,7 @@ export default function AITranslatorPage() {
       time: "18 mins ago"
     },
     {
-      id: 3,
+      id: 'seed-3',
       source: "यदि आपके पास 5 आम हैं और 2 आम अपने मित्र को दे दिए, तो कितने बचे?",
       target: "ᱡᱩᱫᱤ ᱟᱢ ᱴᱷᱮᱱ ᱕ ᱜᱚᱴᱟᱝ ᱩᱞ ᱢᱮᱱᱟᱜᱼᱟ ᱟᱨ ᱒ ᱜᱚᱴᱟᱝ ᱜᱟᱛᱮ ᱮᱢ ᱮᱢᱟᱫᱮᱭᱟ, ᱛᱚᱵᱮ ᱛᱤᱱᱟᱹᱜ ᱥᱟᱨᱮᱡ ᱮᱱᱟ?",
       transliteration: "Judi am then 5 gotań ul mena'a ar 2 gotań gate em emadeya, tobe tina' sarêj ena?",
@@ -74,85 +78,68 @@ export default function AITranslatorPage() {
   const targetLangObj = SUPPORTED_LANGUAGES.find(l => l.id === targetLang) || SUPPORTED_LANGUAGES[0];
   const sourceLangObj = SUPPORTED_LANGUAGES.find(l => l.id === sourceLang) || SUPPORTED_LANGUAGES[1];
 
-  // Helper for generating translations across languages
-  const computeTranslation = (text, target) => {
-    if (target === 'odia') {
-      if (text.includes('किताब') || text.includes('पृष्ठ')) {
-        return {
-          target: 'ପିଲାମାନେ, ବହି ଖୋଲନ୍ତୁ ଏବଂ ପୃଷ୍ଠା ସଂଖ୍ୟା ୧୦ କୁ ଯାଆନ୍ତୁ।',
-          translit: 'Pilamane, bahi kholantu ebang prushtha sankhya 10 ku jaantu.'
-        };
+  // Fetch real translation history from backend on load
+  useEffect(() => {
+    let active = true;
+    const fetchRemoteHistory = async () => {
+      try {
+        const records = await translationService.getHistory();
+        if (active && Array.isArray(records) && records.length > 0) {
+          const mapped = records.map(item => ({
+            id: item._id || item.id,
+            source: item.sourceText || item.source,
+            target: item.translatedText || item.target,
+            transliteration: item.transliteration || '',
+            lang: (item.targetLang || item.lang || 'ODIA').toUpperCase(),
+            time: item.createdAt ? new Date(item.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Recently'
+          }));
+          setHistory(mapped);
+        }
+      } catch (err) {
+        console.warn('Could not load remote history:', err.message);
       }
-      if (text.includes('गिनती') || text.includes('संख्या') || text.includes('1 से 20')) {
-        return {
-          target: 'ପିଲାମାନେ, ଆଜି ଆମେ ୧ ରୁ ୨୦ ପର୍ଯ୍ୟନ୍ତ ଗଣିବା ଶିଖିବା।',
-          translit: 'Pilamane, aji ame 1 ru 20 parjyanta ganiba sikhiba.'
-        };
-      }
-      if (text.includes('आम') || text.includes('बचे') || text.includes('घटाव')) {
-        return {
-          target: 'ଯଦି ଆପଣଙ୍କ ପାଖରେ ୫ଟି ଆମ୍ବ ଅଛି ଏବଂ ୨ଟି ଦେଲେ, ତେବେ ୩ଟି ବଳିଲା।',
-          translit: 'Jadi aapananka pakhare 5ti amba achhi ebam 2ti dele, tebe 3ti balila.'
-        };
-      }
-      return {
-        target: 'ପିଲାମାନେ, ଏହି କଥାକୁ ଧ୍ୟାନରେ ରଖନ୍ତୁ ଏବଂ ଭଲଭାବେ ଶିଖନ୍ତୁ।',
-        translit: 'Pilamane, ehi kathaku dhyanare rakhantu ebang bhalabhabe sikhantu.'
-      };
+    };
+    fetchRemoteHistory();
+    return () => { active = false; };
+  }, []);
+
+  const handleTranslate = async (customText = null) => {
+    const textToTranslate = typeof customText === 'string' ? customText : sourceText;
+    if (!textToTranslate || !textToTranslate.trim()) {
+      setTranslationError('Please enter text to translate.');
+      return;
     }
 
-    if (target === 'santhali') {
-      if (text.includes('किताब') || text.includes('पृष्ठ')) {
-        return {
-          target: 'ᱜᱤᱫᱽᱨᱟᱹ ᱠᱚ, ᱯᱩᱛᱷᱤ ᱡᱷᱤᱡ ᱯᱮ ᱟᱨ ᱥᱟᱠᱟᱢ ᱮᱞ ᱑᱐ ᱨᱮ ᱥᱮᱱᱚᱜ ᱯᱮ᱾',
-          translit: 'Gidra ko, puthi jhij pe ar sakam el 10 re senog pe.'
-        };
-      }
-      if (text.includes('गिनती') || text.includes('संख्या')) {
-        return {
-          target: 'ᱜᱤᱫᱽᱨᱟᱹ ᱠᱚ, ᱛᱮᱦᱮᱧ ᱫᱚ ᱟᱵᱚ ᱞᱮᱠᱷᱟ ᱵᱚᱱ ᱪᱮᱫᱚᱜᱼᱟ᱾',
-          translit: 'Gidra ko, teheñ do abo lekha bon chedo\'a.'
-        };
-      }
-      return {
-        target: 'ᱜᱤᱫᱽᱨᱟᱹ ᱠᱚ, ᱱᱚᱣᱟ ᱠᱟᱛᱷᱟ ᱫᱚᱦᱚᱭ ᱯᱮ ᱟᱨ ᱪᱮᱫᱚᱜ ᱯᱮ᱾',
-        translit: 'Gidra ko, nowa katha dohoy pe ar chedog pe.'
-      };
-    }
-
-    const tObj = SUPPORTED_LANGUAGES.find(l => l.id === target);
-    if (tObj) {
-      return {
-        target: tObj.samplePhraseTarget,
-        translit: tObj.transliteration
-      };
-    }
-
-    return { target: text, translit: text };
-  };
-
-  const handleTranslate = () => {
-    if (!sourceText.trim()) return;
     setIsTranslating(true);
+    setTranslationError('');
 
-    setTimeout(() => {
+    try {
+      const res = await translationService.translate({
+        text: textToTranslate,
+        sourceLang,
+        targetLang,
+        mode
+      });
+
+      setTranslatedText(res.translatedText);
+      setTransliteration(res.transliteration || '');
+
+      const newItem = {
+        id: res._id || `trans_${Date.now()}`,
+        source: res.sourceText || textToTranslate,
+        target: res.translatedText,
+        transliteration: res.transliteration || '',
+        lang: (res.targetLang || targetLang).toUpperCase(),
+        time: 'Just now'
+      };
+
+      setHistory(prev => [newItem, ...prev.filter(i => i.id !== newItem.id)]);
+    } catch (err) {
+      console.error('Translation failed:', err);
+      setTranslationError(err.message || 'Translation failed. Please check backend connection.');
+    } finally {
       setIsTranslating(false);
-      const res = computeTranslation(sourceText, targetLang);
-      setTranslatedText(res.target);
-      setTransliteration(res.translit);
-
-      setHistory(prev => [
-        {
-          id: Date.now(),
-          source: sourceText,
-          target: res.target,
-          transliteration: res.translit,
-          lang: targetLang.toUpperCase(),
-          time: 'Just now'
-        },
-        ...prev
-      ]);
-    }, 500);
+    }
   };
 
   const handleSwap = () => {
@@ -249,21 +236,8 @@ export default function AITranslatorPage() {
       ];
       const randomPhrase = simulatedPhrases[Math.floor(Math.random() * simulatedPhrases.length)];
       setSourceText(randomPhrase);
-      const res = computeTranslation(randomPhrase, targetLang);
-      setTranslatedText(res.target);
-      setTransliteration(res.translit);
-      setHistory(prev => [
-        {
-          id: Date.now(),
-          source: randomPhrase,
-          target: res.target,
-          transliteration: res.translit,
-          lang: targetLang.toUpperCase(),
-          time: 'Just now'
-        },
-        ...prev
-      ]);
-    }, 2000);
+      handleTranslate(randomPhrase);
+    }, 1500);
   };
 
   const stopVoiceRecording = () => {
@@ -277,12 +251,22 @@ export default function AITranslatorPage() {
     setIsListening(false);
   };
 
-  const deleteHistoryItem = (id) => {
+  const deleteHistoryItem = async (id) => {
     setHistory(prev => prev.filter(item => item.id !== id));
+    try {
+      await translationService.deleteHistoryItem(id);
+    } catch (err) {
+      console.warn('Delete translation error:', err.message);
+    }
   };
 
-  const clearAllHistory = () => {
+  const clearAllHistory = async () => {
     setHistory([]);
+    try {
+      await translationService.clearAllHistory();
+    } catch (err) {
+      console.warn('Clear translations error:', err.message);
+    }
   };
 
   const filteredHistory = history.filter(item => {
@@ -594,14 +578,25 @@ export default function AITranslatorPage() {
 
             <button
               type="button"
-              onClick={handleTranslate}
+              onClick={() => handleTranslate()}
               disabled={isTranslating}
               className="px-6 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 disabled:opacity-50 text-white font-bold text-xs shadow-md shadow-brand-700/20 flex items-center gap-2 transition-all hover:scale-105"
             >
-              <Sparkles className="w-4 h-4 text-amber-300" />
+              {isTranslating ? (
+                <Loader2 className="w-4 h-4 text-amber-300 animate-spin" />
+              ) : (
+                <Sparkles className="w-4 h-4 text-amber-300" />
+              )}
               <span>{isTranslating ? "Translating..." : "Translate Now"}</span>
             </button>
           </div>
+
+          {translationError && (
+            <div className="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs flex items-center gap-2 animate-in fade-in">
+              <AlertCircle className="w-4 h-4 flex-shrink-0" />
+              <span>{translationError}</span>
+            </div>
+          )}
         </div>
 
         {/* Right Column: Target Language (100% Fully Editable!) */}
@@ -613,12 +608,7 @@ export default function AITranslatorPage() {
               </span>
               <select
                 value={targetLang}
-                onChange={(e) => {
-                  setTargetLang(e.target.value);
-                  const res = computeTranslation(sourceText, e.target.value);
-                  setTranslatedText(res.target);
-                  setTransliteration(res.translit);
-                }}
+                onChange={(e) => setTargetLang(e.target.value)}
                 className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-brand-50 dark:bg-brand-950 border border-brand-200 dark:border-brand-800 text-brand-900 dark:text-brand-300 focus:outline-none focus:ring-1 focus:ring-brand-500"
               >
                 {SUPPORTED_LANGUAGES.map(l => (

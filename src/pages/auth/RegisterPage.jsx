@@ -75,7 +75,8 @@ export default function RegisterPage() {
         state: formData.state,
         district: formData.district,
         grade: formData.teachingGrade,
-        preferredLanguage: formData.preferredLanguage
+        preferredLanguage: formData.preferredLanguage,
+        password: formData.password
       });
       setIsSuccess(true);
       setTimeout(() => {

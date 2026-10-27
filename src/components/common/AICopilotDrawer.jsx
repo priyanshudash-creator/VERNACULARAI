@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { speechSynthesizer } from '../../utils/speechUtils';
+import copilotService from '../../services/copilotService';
 import {
   Sparkles,
   X,
@@ -47,7 +48,7 @@ How can I assist your classroom today?`,
     { label: "Translate to Santhali", text: "Translate: 'Children, please open page 10 of your math book' into Santhali." }
   ];
 
-  const handleSend = (textToSend) => {
+  const handleSend = async (textToSend) => {
     const query = textToSend || input;
     if (!query.trim() || isTyping) return;
 
@@ -61,53 +62,40 @@ How can I assist your classroom today?`,
     setInput('');
     setIsTyping(true);
 
-    setTimeout(() => {
-      let aiResponse = {};
+    try {
+      const response = await copilotService.ask({
+        message: query,
+        grade: 'Grade 2',
+        language: 'Santhali',
+        subject: 'Mathematics'
+      });
 
-      if (query.toLowerCase().includes('subtraction') || query.toLowerCase().includes('घटाव')) {
-        aiResponse = {
-          role: 'assistant',
-          content: "Here is a structured pedagogy breakdown for explaining subtraction to Grade 2:",
-          breakdown: {
-            simpleExplanation: "Subtraction is simply 'taking away' items from a group. When we have 5 fruits and give 2 to a friend, 3 remain.",
-            localExample: "Using forest fruits: If you gather 5 mahua flowers and a bird takes 2, count the remaining flowers together.",
-            motherTongue: "ᱥᱟᱱᱛᱟᱲᱤ (Santhali): ᱡᱩᱫᱤ ᱟᱢ ᱴᱷᱮᱱ ᱕ ᱜᱚᱴᱟᱝ ᱩᱞ ᱢᱮᱱᱟᱜᱼᱟ ᱟᱨ ᱒ ᱜᱚᱴᱟᱝ ᱜᱟᱛᱮ ᱮᱢ ᱮᱢᱟᱫᱮᱭᱟ, ᱛᱚᱵᱮ ᱓ ᱜᱚᱴᱟᱝ ᱥᱟᱨᱮᱡ ᱮᱱᱟ᱾",
-            activity: "Tamarind Seed Takeaway Game: Put 10 seeds in a small clay cup. Have the child physically remove 3 seeds and count the rest.",
-            practiceQuestion: "Practice Question: 8 tamarind seeds - 3 seeds = ? (Answer: 5 seeds)"
-          },
-          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        };
-      } else if (query.toLowerCase().includes('market') || query.toLowerCase().includes('बाजार') || query.toLowerCase().includes('हाट')) {
-        aiResponse = {
-          role: 'assistant',
-          content: "Here is a culturally rooted Dumka Haat counting context for Grade 2:",
-          breakdown: {
-            simpleExplanation: "In the weekly Haat, vendors stack items in small heaps of 5 or 10. We use this to teach grouping.",
-            localExample: "Stacking guavas or tamarind bundles into tens: 10 + 2 = 12 (Gel Bar).",
-            motherTongue: "ᱥᱟᱱᱛᱟᱲᱤ (Santhali): ᱦᱟᱴ ᱨᱮ ᱑᱐ ᱨᱮᱱᱟᱜ ᱵᱤᱸᱰᱟᱹ ᱵᱮᱱᱟᱣ ᱠᱟᱛᱮ ᱞᱮᱠᱷᱟ ᱵᱚᱱ ᱪᱮᱫᱚᱜᱼᱟ᱾",
-            activity: "Classroom Mock Bazaar: Give students paper tokens to buy paper mangoes priced from ₹1 to ₹10.",
-            practiceQuestion: "What is 10 plus 4 in the Santhali numbering system? (Answer: Gel Pone)"
-          },
-          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        };
-      } else {
-        aiResponse = {
-          role: 'assistant',
-          content: `Pedagogy recommendation for: "${query}":`,
-          breakdown: {
-            simpleExplanation: "Connect the abstract concept with physical items the students touch daily in Dumka.",
-            localExample: "Use sal leaves, pebbles, and local stories to bridge the mother-tongue conceptual bridge.",
-            motherTongue: "ᱥᱟᱱᱛᱟᱲᱤ ᱛᱮ: ᱜᱤᱫᱽᱨᱟᱹ ᱠᱚ ᱟᱠᱚᱣᱟᱜ ᱟᱭᱳ ᱟᱲᱟᱝ ᱛᱮ ᱞᱟᱹᱭ ᱟᱠᱚ ᱯᱮ᱾ (Teach first in mother tongue before writing in Hindi).",
-            activity: "Peer-sharing circle: Have stronger students like Asha guide developing peers like Rahul.",
-            practiceQuestion: "Check understanding: Ask 2 oral questions in Santhali before formal written evaluation."
-          },
-          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        };
-      }
+      const aiResponse = {
+        role: 'assistant',
+        content: response.content || `Pedagogy recommendation for: "${query}":`,
+        breakdown: response.breakdown,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
 
       setMessages(prev => [...prev, aiResponse]);
+    } catch (err) {
+      console.warn('Copilot drawer backend warning:', err.message);
+      // Fallback response
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: `Pedagogy recommendation for: "${query}":`,
+        breakdown: {
+          simpleExplanation: "Connect the abstract concept with physical items the students touch daily in Dumka.",
+          localExample: "Use sal leaves, pebbles, and local stories to bridge the mother-tongue conceptual bridge.",
+          motherTongue: "ᱥᱟᱱᱛᱟᱲᱤ ᱛᱮ: ᱜᱤᱫᱽᱨᱟᱹ ᱠᱚ ᱟᱠᱚᱣᱟᱜ ᱟᱭᱳ ᱟᱲᱟᱝ ᱛᱮ ᱞᱟᱹᱭ ᱟᱠᱚ ᱯᱮ᱾ (Teach first in mother tongue before writing in Hindi).",
+          activity: "Peer-sharing circle: Have stronger students like Asha guide developing peers like Rahul.",
+          practiceQuestion: "Check understanding: Ask 2 oral questions in Santhali before formal written evaluation."
+        },
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      }]);
+    } finally {
       setIsTyping(false);
-    }, 1200);
+    }
   };
 
   const handleSpeak = (text, idx) => {

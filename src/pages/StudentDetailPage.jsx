@@ -19,7 +19,7 @@ export default function StudentDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const student = STUDENTS_DATA.find((s) => s.id === id) || STUDENTS_DATA[0];
+  const student = STUDENTS_DATA.find((s) => s.id === id || s._id === id || s.rollNo === id) || STUDENTS_DATA[0];
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto pb-12">

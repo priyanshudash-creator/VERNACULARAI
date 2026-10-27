@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { speechSynthesizer } from '../utils/speechUtils';
+import copilotService from '../services/copilotService';
 import {
   Bot,
   Send,
@@ -42,7 +43,7 @@ export default function AICopilotPage() {
     "How to help Rahul with teen numbers?"
   ];
 
-  const handleSend = (text) => {
+  const handleSend = async (text) => {
     const query = text || input;
     if (!query.trim() || isTyping) return;
 
@@ -54,33 +55,38 @@ export default function AICopilotPage() {
     setInput('');
     setIsTyping(true);
 
-    setTimeout(() => {
-      let breakdownData = {
-        simpleExplanation: "Break the concept into concrete physical actions before teaching mathematical notation.",
-        localExample: "Using weekly Haat (bazaar) exchanges or counting sal leaves / tamarind seeds.",
-        motherTongue: "ᱥᱟᱱᱛᱟᱲᱤ ᱛᱮ: ᱢᱟᱬᱟᱝ ᱫᱚ ᱟᱭᱳ ᱟᱲᱟᱝ ᱛᱮ ᱞᱟᱹᱭ ᱟᱠᱚ ᱯᱮ ᱤᱱᱟᱹ ᱛᱟᱭᱚᱢ ᱦᱤᱱᱫᱤ ᱛᱮ ᱥᱚᱫᱚᱨ ᱯᱮ᱾ (Explain in mother tongue first).",
-        activity: "Pair and Share: Have children work in pairs of two with 10 seeds each to visualize combinations.",
-        practiceQuestion: "What is 10 + 4 in Santhali? (Answer: ᱜᱮᱞ ᱯᱩᱱ / Gel Pone)"
-      };
-
-      if (query.toLowerCase().includes('subtraction') || query.toLowerCase().includes('घटाव')) {
-        breakdownData = {
-          simpleExplanation: "Explain subtraction as 'taking away' items from a basket. 5 items minus 2 leaves 3.",
-          localExample: "Harvesting mangoes: If a basket has 5 mangoes and you gift 2 to a friend, 3 remain.",
-          motherTongue: "ᱥᱟᱱᱛᱟᱲᱤ ᱛᱮ: ᱡᱩᱫᱤ ᱟᱢ ᱴᱷᱮᱱ ᱕ ᱜᱚᱴᱟᱝ ᱩᱞ ᱢᱮᱱᱟᱜᱼᱟ ᱟᱨ ᱒ ᱜᱚᱴᱟᱝ ᱮᱢ ᱮᱢᱟᱫᱮᱭᱟ, ᱛᱚᱵᱮ ᱓ ᱜᱚᱴᱟᱝ ᱥᱟᱨᱮᱡ ᱮᱱᱟ᱾",
-          activity: "Tamarind Seed Takeaway Game: Put 8 seeds in a circle, student removes 3 and counts rest.",
-          practiceQuestion: "8 seeds - 3 seeds = ? (Answer: 5 seeds / ᱢᱚᱬᱮ ᱡᱟᱝ)"
-        };
-      }
+    try {
+      const response = await copilotService.ask({
+        message: query,
+        grade: 'Grade 2',
+        language: 'Santhali',
+        subject: 'Mathematics'
+      });
 
       setMessages(prev => [...prev, {
         role: 'assistant',
-        content: `Pedagogy recommendation for: "${query}":`,
-        breakdown: breakdownData,
+        content: response.content || `Pedagogy recommendation for: "${query}":`,
+        breakdown: response.breakdown,
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       }]);
+    } catch (err) {
+      console.warn('Copilot backend warning:', err.message);
+      // Fallback response
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: `Pedagogy recommendation for: "${query}":`,
+        breakdown: {
+          simpleExplanation: "Break the concept into concrete physical actions before teaching mathematical notation.",
+          localExample: "Using weekly Haat (bazaar) exchanges or counting sal leaves / tamarind seeds.",
+          motherTongue: "ᱥᱟᱱᱛᱟᱲᱤ ᱛᱮ: ᱢᱟᱬᱟᱝ ᱫᱚ ᱟᱭᱳ ᱟᱲᱟᱝ ᱛᱮ ᱞᱟᱹᱭ ᱟᱠᱚ ᱯᱮ ᱤᱱᱟᱹ ᱛᱟᱭᱚᱢ ᱦᱤᱱᱫᱤ ᱛᱮ ᱥᱚᱫᱚᱨ ᱯᱮ᱾ (Explain in mother tongue first).",
+          activity: "Pair and Share: Have children work in pairs of two with 10 seeds each to visualize combinations.",
+          practiceQuestion: "What is 10 + 4 in Santhali? (Answer: ᱜᱮᱞ ᱯᱩᱱ / Gel Pone)"
+        },
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      }]);
+    } finally {
       setIsTyping(false);
-    }, 1200);
+    }
   };
 
   return (

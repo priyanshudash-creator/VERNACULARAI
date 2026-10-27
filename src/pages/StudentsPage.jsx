@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { STUDENTS_DATA } from '../data/mockData';
+import studentService from '../services/studentService';
 import {
   Users,
   Search,
@@ -14,11 +15,28 @@ import {
 } from 'lucide-react';
 
 export default function StudentsPage() {
+  const [students, setStudents] = useState(STUDENTS_DATA);
   const [search, setSearch] = useState('');
   const [filterStatus, setFilterStatus] = useState('All');
   const [sortBy, setSortBy] = useState('name');
 
-  const filteredStudents = STUDENTS_DATA.filter((s) => {
+  useEffect(() => {
+    let active = true;
+    const fetchStudents = async () => {
+      try {
+        const remote = await studentService.getStudents();
+        if (active && Array.isArray(remote) && remote.length > 0) {
+          setStudents(remote);
+        }
+      } catch (e) {
+        console.warn('Could not fetch remote students:', e.message);
+      }
+    };
+    fetchStudents();
+    return () => { active = false; };
+  }, []);
+
+  const filteredStudents = students.filter((s) => {
     const matchSearch = s.name.toLowerCase().includes(search.toLowerCase()) || s.rollNo.includes(search);
     const matchFilter = filterStatus === 'All' || s.progressStatus === filterStatus;
     return matchSearch && matchFilter;

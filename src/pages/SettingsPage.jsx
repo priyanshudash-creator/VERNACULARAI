@@ -50,9 +50,9 @@ export default function SettingsPage() {
     largeTouchTargets: true
   });
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
-    updateProfile(profileData);
+    await updateProfile(profileData);
     setSavedAlert(true);
     setTimeout(() => setSavedAlert(false), 2500);
   };

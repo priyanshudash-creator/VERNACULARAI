@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { LESSONS_CATALOG } from '../data/mockData';
 import { speechSynthesizer } from '../utils/speechUtils';
 import { useOffline } from '../context/OfflineContext';
+import lessonService from '../services/lessonService';
 import AIContentCheckModal from '../components/common/AIContentCheckModal';
 import {
   BookOpen,
@@ -25,7 +26,25 @@ export default function LessonDetailPage() {
   const navigate = useNavigate();
   const { saveLessonOffline } = useOffline();
 
-  const lesson = LESSONS_CATALOG.find(l => l.id === id) || LESSONS_CATALOG[0];
+  const [lesson, setLesson] = useState(() => {
+    return LESSONS_CATALOG.find(l => l.id === id || l._id === id) || LESSONS_CATALOG[0];
+  });
+
+  useEffect(() => {
+    let active = true;
+    const fetchLesson = async () => {
+      try {
+        const remote = await lessonService.getLessonById(id);
+        if (active && remote) {
+          setLesson(remote);
+        }
+      } catch (e) {
+        // Fallback already set
+      }
+    };
+    if (id) fetchLesson();
+    return () => { active = false; };
+  }, [id]);
 
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [showCheckModal, setShowCheckModal] = useState(false);

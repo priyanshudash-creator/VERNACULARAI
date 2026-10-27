@@ -4,6 +4,7 @@ import { useOffline } from '../context/OfflineContext';
 import { SUPPORTED_LANGUAGES } from '../data/mockData';
 import AIContentCheckModal from '../components/common/AIContentCheckModal';
 import { speechSynthesizer } from '../utils/speechUtils';
+import lessonService from '../services/lessonService';
 import {
   Sparkles,
   BookOpen,
@@ -45,20 +46,24 @@ export default function LessonGeneratorPage() {
     "Validating with NIPUN Bharat Foundational Numeracy checks..."
   ];
 
-  const handleGenerate = (e) => {
+  const handleGenerate = async (e) => {
     e.preventDefault();
     setIsGenerating(true);
     setGenerationStep(1);
     setGeneratedLesson(null);
 
-    setTimeout(() => setGenerationStep(2), 500);
-    setTimeout(() => setGenerationStep(3), 1100);
-    setTimeout(() => setGenerationStep(4), 1700);
-    setTimeout(() => setGenerationStep(5), 2300);
+    const stepTimer1 = setTimeout(() => setGenerationStep(2), 400);
+    const stepTimer2 = setTimeout(() => setGenerationStep(3), 800);
+    const stepTimer3 = setTimeout(() => setGenerationStep(4), 1200);
 
-    setTimeout(() => {
-      setIsGenerating(false);
-      const newLesson = {
+    try {
+      const generated = await lessonService.generateLesson(formData);
+      setGenerationStep(5);
+      setGeneratedLesson(generated);
+    } catch (err) {
+      console.warn('Backend lesson generation warning:', err.message);
+      // Fallback
+      setGeneratedLesson({
         id: `ai-gen-${Date.now()}`,
         title: `${formData.topic}: Localized Vernacular Pedagogy`,
         subject: formData.subject,
@@ -77,14 +82,23 @@ export default function LessonGeneratorPage() {
           { q: "10 और 4 मिलकर कितने होते हैं?", options: ["13", "14 (ᱜᱮᱞ ᱯᱩᱱ)", "15"], ans: "14" },
           { q: "Santhali में '20' को क्या कहते हैं?", options: ["ᱠᱩᱲᱤ / ᱤᱥᱤ", "ᱜᱮᱞ", "ᱯᱮ"], ans: "ᱠᱩᱲᱤ / ᱤᱥᱤ" }
         ]
-      };
-      setGeneratedLesson(newLesson);
-    }, 2800);
+      });
+    } finally {
+      clearTimeout(stepTimer1);
+      clearTimeout(stepTimer2);
+      clearTimeout(stepTimer3);
+      setIsGenerating(false);
+    }
   };
 
-  const handleSaveOffline = () => {
+  const handleSaveOffline = async () => {
     if (!generatedLesson) return;
     saveLessonOffline(generatedLesson);
+    try {
+      await lessonService.saveLesson(generatedLesson);
+    } catch (e) {
+      console.warn('Could not save lesson to server:', e.message);
+    }
     setSavedAlert(true);
     setTimeout(() => setSavedAlert(false), 2500);
   };

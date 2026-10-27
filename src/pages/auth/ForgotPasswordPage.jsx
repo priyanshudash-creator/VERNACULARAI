@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, KeyRound, Lock, CheckCircle2, ArrowRight } from 'lucide-react';
+import authService from '../../services/authService';
 
 export default function ForgotPasswordPage() {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ export default function ForgotPasswordPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleSendOtp = (e) => {
+  const handleSendOtp = async (e) => {
     e.preventDefault();
     if (!email) {
       setError('Please provide your registered email or mobile number.');
@@ -20,10 +21,14 @@ export default function ForgotPasswordPage() {
     }
     setError('');
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      await authService.forgotPassword(email);
       setStep(2);
-    }, 700);
+    } catch (err) {
+      setError(err.message || 'Failed to send OTP.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleVerifyOtp = (e) => {
@@ -33,14 +38,10 @@ export default function ForgotPasswordPage() {
       return;
     }
     setError('');
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setStep(3);
-    }, 600);
+    setStep(3);
   };
 
-  const handleResetPassword = (e) => {
+  const handleResetPassword = async (e) => {
     e.preventDefault();
     if (newPassword.length < 8) {
       setError('Password must contain at least 8 characters.');
@@ -52,10 +53,18 @@ export default function ForgotPasswordPage() {
     }
     setError('');
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      await authService.resetPassword({
+        email,
+        otp: otp.join(''),
+        newPassword
+      });
       setStep(4);
-    }, 800);
+    } catch (err) {
+      setError(err.message || 'Failed to reset password.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleOtpChange = (index, value) => {

@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { TEACHER_PROFILE } from '../data/mockData';
+import authService from '../services/authService';
 
 const AuthContext = createContext();
 
@@ -13,14 +14,48 @@ export function AuthProvider({ children }) {
         return TEACHER_PROFILE;
       }
     }
-    // Default demo user is logged in for smooth exploration, but can logout
     return TEACHER_PROFILE;
   });
 
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     const savedAuth = localStorage.getItem('vernacular_is_authenticated');
+    const token = localStorage.getItem('vernacular_token');
+    if (token) return true;
     return savedAuth !== null ? JSON.parse(savedAuth) : true;
   });
+
+  const [loading, setLoading] = useState(true);
+
+  // Sync session on mount with backend if token exists
+  useEffect(() => {
+    const initAuth = async () => {
+      const token = localStorage.getItem('vernacular_token');
+      if (token) {
+        try {
+          const res = await authService.getMe();
+          if (res?.user) {
+            setUser(res.user);
+            setIsAuthenticated(true);
+            localStorage.setItem('vernacular_auth_user', JSON.stringify(res.user));
+          }
+        } catch (err) {
+          console.warn('[Auth] Token validation error:', err.message);
+        }
+      }
+      setLoading(false);
+    };
+
+    initAuth();
+
+    // Listen for session expiry event
+    const handleAuthExpired = () => {
+      setIsAuthenticated(false);
+      localStorage.setItem('vernacular_is_authenticated', JSON.stringify(false));
+    };
+
+    window.addEventListener('vernacular:auth-expired', handleAuthExpired);
+    return () => window.removeEventListener('vernacular:auth-expired', handleAuthExpired);
+  }, []);
 
   useEffect(() => {
     if (user && isAuthenticated) {
@@ -31,33 +66,70 @@ export function AuthProvider({ children }) {
     }
   }, [user, isAuthenticated]);
 
-  const login = (email, password) => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (!email || !password) {
-          reject(new Error("Please enter both email/phone and password"));
-          return;
-        }
-        if (password.length < 8) {
-          reject(new Error("Password must be at least 8 characters"));
-          return;
-        }
+  const login = async (email, password) => {
+    try {
+      const response = await authService.login(email, password);
+      const authenticatedUser = response.user || {
+        ...TEACHER_PROFILE,
+        email: email.includes('@') ? email : TEACHER_PROFILE.email,
+        lastLogin: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
 
-        const authenticatedUser = {
+      setUser(authenticatedUser);
+      setIsAuthenticated(true);
+      return authenticatedUser;
+    } catch (error) {
+      // If backend is unreachable, provide smooth fallback with validation
+      if (error.status === 0) {
+        if (!email || !password) throw new Error("Please enter both email/phone and password");
+        if (password.length < 8) throw new Error("Password must be at least 8 characters");
+
+        const fallbackUser = {
           ...TEACHER_PROFILE,
           email: email.includes('@') ? email : TEACHER_PROFILE.email,
           lastLogin: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         };
-        setUser(authenticatedUser);
+        setUser(fallbackUser);
         setIsAuthenticated(true);
-        resolve(authenticatedUser);
-      }, 500);
-    });
+        return fallbackUser;
+      }
+      throw error;
+    }
   };
 
-  const register = (data) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
+  const register = async (data) => {
+    try {
+      const payload = {
+        fullName: data.fullName || data.name,
+        email: data.email,
+        password: data.password || 'Password123!',
+        mobile: data.mobile || data.phone,
+        school: data.school,
+        state: data.state,
+        district: data.district,
+        teachingGrade: data.grade || data.teachingGrade,
+        preferredLanguage: data.preferredLanguage || data.primaryLanguage
+      };
+
+      const response = await authService.register(payload);
+      const newUser = response.user || {
+        ...TEACHER_PROFILE,
+        name: data.fullName || "Sunita Kumari",
+        email: data.email,
+        phone: data.mobile,
+        school: data.school,
+        state: data.state,
+        district: data.district,
+        grade: data.grade,
+        primaryLanguage: data.preferredLanguage
+      };
+
+      setUser(newUser);
+      setIsAuthenticated(true);
+      return newUser;
+    } catch (error) {
+      if (error.status === 0) {
+        // Offline fallback
         const newUser = {
           ...TEACHER_PROFILE,
           name: data.fullName || "Sunita Kumari",
@@ -71,17 +143,35 @@ export function AuthProvider({ children }) {
         };
         setUser(newUser);
         setIsAuthenticated(true);
-        resolve(newUser);
-      }, 600);
-    });
+        return newUser;
+      }
+      throw error;
+    }
   };
 
-  const logout = () => {
-    setIsAuthenticated(false);
-    localStorage.removeItem('vernacular_is_authenticated');
+  const logout = async () => {
+    try {
+      await authService.logout();
+    } catch (e) {
+      // ignore
+    } finally {
+      setIsAuthenticated(false);
+      localStorage.removeItem('vernacular_is_authenticated');
+      localStorage.removeItem('vernacular_token');
+    }
   };
 
-  const updateProfile = (updatedFields) => {
+  const updateProfile = async (updatedFields) => {
+    try {
+      const res = await authService.updateProfile(updatedFields);
+      if (res?.user) {
+        setUser(res.user);
+        return res.user;
+      }
+    } catch (e) {
+      console.warn('[Auth] Update profile remote sync warning:', e.message);
+    }
+
     setUser(prev => {
       const next = { ...prev, ...updatedFields };
       localStorage.setItem('vernacular_auth_user', JSON.stringify(next));
@@ -93,6 +183,7 @@ export function AuthProvider({ children }) {
     <AuthContext.Provider value={{
       user,
       isAuthenticated,
+      loading,
       login,
       register,
       logout,
